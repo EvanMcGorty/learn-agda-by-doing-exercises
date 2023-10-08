@@ -1,0 +1,4 @@
+name: learn-agda-by-doing-exercises
+flags:
+  --safe
+  --cubical-compatible
