@@ -1,6 +1,6 @@
 # learn-agda-by-doing-exercises
 
-A large collection of cumulative Agda exercises to aid in learning. Brief and to-the-point explanations with fun and challenging exercises on a wide variety of topics. Explanations are very dense with information so exercises can also be used as a reference. Absolutely no prior experience is expected. However, due to the information-dense style, experience with programming (especially functional programming) will likely be helpful.
+A large collection of cumulative Agda exercises to aid in learning with brief and to-the-point explanations. A primary goal of this tutorial is to avoid making conceptual leaps and to introduce as few concepts as possible at once, so that each tiny concept can be explained and practiced in a maximally isolated manner. At the same time, explanations are very dense with information, so exercises (which are entire agda files) can also be used as a reference. Absolutely no prior experience is expected but due to the information-dense style, experience with programming (especially functional programming) will likely be helpful.
 
 Each exercise may be completed independently, though they generally build off of content in previous exercises. Exercises mostly use naming conventions from the Agda stdlib while providing ascii synonyms for users who don't want to type unicode symbols. This allows "Agda exercises" to double as "Agda stdlib exercises". Each exercise imports definitions from the provided solutions (in the Solutions directory) to previous exercises, so exercises do not depend on the reader's solutions (in the Exercises directory).
 
@@ -10,7 +10,7 @@ Files may contain comments up to 150 characters long, so be prepared to turn on 
 
 ## Other Resources
 
-These Exercises aim to be more or less exactly what I wish existed when I started learning Agda. They may however not be helpful to everybody, and, even moreso, may not be sufficient for learning Agda without other resources. The amount of new knowledge you need to absorb tends to ramp up very quickly when following any Agda tutorial and, consequently, you may quickly hit a dead end, at which point things become too difficult and confusing to progress further. I therefore highly recommending learning from multiple sources at once, as they will all re-explain various important concepts in different ways and touch on slightly different topics. This will also allow you to get as far as you can with each resource, and then move on to the next. By the time you circle back around to a resource again, you will understand more and be able to make it further. For this purpose I recommend the following resources. Start at the top and work your way down as you see fit. If one resource isn't working then try another one, and maybe come back to the first one later.
+These Exercises aim to be more or less exactly what I wish existed when I started learning Agda. They may however not be helpful to everybody, and, even more so, may not be sufficient for learning Agda without other resources. The amount of new knowledge you need to absorb tends to ramp up very quickly when following any Agda tutorial and, consequently, you may quickly hit a dead end, at which point things become too difficult and confusing to progress further. I therefore highly recommending learning from multiple sources at once, as they will all re-explain various important concepts in different ways and touch on slightly different topics. This will also allow you to get as far as you can with each resource, and then move on to the next. By the time you circle back around to a resource again, you will understand more and be able to make it further. For this purpose I recommend the following resources. Start at the top and work your way down as you see fit. If one resource isn't working then try another one, and maybe come back to the first one later.
 
 ### Agda From Nothing Follow-Along Introductory Lectures
 
@@ -130,6 +130,8 @@ Good luck on your Agda journey!
 
 ## Table of Contents
 
+### Part 1 - Functional Programming
+
 ### Ex0 - Functions
 
 - Basic OPTIONS and top-level modules
@@ -139,8 +141,9 @@ Good luck on your Agda journey!
 - Currying
 - Lambdas
 - Higher order functions
+- Absurdities
 
-## WIP Table of not-yet-completed Contents
+### (WIP Table of not-yet-completed Contents)
 
 ### Booleans
 
@@ -150,6 +153,7 @@ Good luck on your Agda journey!
 - Pattern matching
 - Infix operators, precedence, and confusing errors
 - Evaluating/normalizing expressions
+- Functions into Set and compile-time computations
 
 ### Natural Numbers
 
@@ -161,22 +165,24 @@ Good luck on your Agda journey!
 
 ### Lists
 
+### Part 2 - Constructive Logic
+
 ### Propositions
 
 - Re-defining important functions from Ex0 with levels and stdlib-style syntax
 - Unit
 - Empty
 - Negation
-- IsIrrelevant
 
 ### Sums
 
 ### Products
 
+### Part 3 - Dependent Types
+
 ### Pi
 
-- Functions into Set
-- Proofs about pattern matching operations
+- Dependent pattern matching
 
 ### Sigma
 
@@ -184,6 +190,12 @@ Good luck on your Agda journey!
 
 - "if then else"
 - natural-induction
+
+### GADTs
+
+- Reflects
+
+### Part 4 - Equality
 
 ### Propositional Equality
 
@@ -193,13 +205,43 @@ Good luck on your Agda journey!
 
 ### Extensionality
 
+### Part 5 - Programming with Types
+
 ### Church Encodings
+
+- Free theorems from parametricity
 
 ### Finite Sets
 
 ### Length-indexed Lists
 
+- Bit arrays and operations
+
+### Termination
+
+- Well founded relations
+
+### Part 6 - Mathematical Constructs
+
 ### Isomorphisms
+
+- Cardinalities and operations on finite sets
+
+### Abstract Algebra
+
+- Semigroup
+- Monoid
+- Group
+
+### Setoids
+
+### Double-Negation
+
+- Double negation elimination
+- Law of excluded middle
+- Double negation shift
+
+### Part 7 - Category Theory
 
 ### Categories
 
@@ -211,24 +253,25 @@ Good luck on your Agda journey!
 
 ### Monad Transformers
 
-### Double-Negation
+### Part 8 - Infinity
 
-- Double negation elimination
-- Law of excluded middle
-- Double negation shift
-- The Double-Negation Monad
-- The Classical Logic Monad
+### Infinite Series
 
 ### Coinduction
 
+- --guardedness
 - Stream
 - Colist
 - Delay
 - Conat
+- Bisimilarity
 
-### Termination
+### Cardinalities
 
-### Setoids
+- Non-invertible functions
+- type-in-type paradox?
+
+### Part 9 - Cubical Agda
 
 ### Paths
 
@@ -239,3 +282,14 @@ Good luck on your Agda journey!
 ### Quotients
 
 ### Univalence
+
+### Part 10 - Beyond
+
+### Logic
+
+### Set Theory
+
+- Defining various forms of set theory
+- Modeling a simple constructive set theory
+
+### Lambda Calculus

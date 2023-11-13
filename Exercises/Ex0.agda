@@ -24,9 +24,9 @@ We will start out with some options that we will be using throughout these exerc
 
 --safe means that all code must terminate and requires you to only use a safe subset of Agda which is logically sound.
 
---cubical-compatible stops the typechecker from using certain axioms that are logically inconsistent with other variants of Agda
+--cubical-compatible stops the typechecker from using certain axioms that are logically inconsistent with other variants of Agda.
 
-These two options more or less maximize compatibility with other extensions of Agda and are automatically turned on in every file in this library.
+These options more or less maximize compatibility with files using other extensions of Agda.
 
 Normally these would have to be at the top of every file, but I set them as defaults within this library so they can be left out in later exercises.
 
@@ -63,9 +63,13 @@ This is the first part of the definition of "id".
 
 This results in a function of type "A → A", i.e. a function which takes an A and returns an A.
 
-Computationally, this is the type of the identity function, which can be used on a value of any type.
+Computationally, this is the type of the identity function, which can be used on a value of any type (i.e. it is polymorphic or generic).
 
-Logically, this can be interpreted as a proposition that forall A, A implies A.
+Agda functions also can often be interpreted as proofs of logical propositions.
+
+In this case, we can interpret id as a proposition that forall A, A implies A.
+
+In a few exercises we will dive much deeper into the connection between programs and proofs, so this exercise will just tease the concept a bit.
 
 Now lets look at the definition of that function, aka the proof of that proposition
 
@@ -94,7 +98,7 @@ You can also inspect the context in the hole with C-c C-, to see what is availab
 
 Finally, C-c C-. lets you inspect the type of the expression currently typed into the hole, in addition to the context.
 
-You can also jump into the next or previous hole in a file with C-c C-f and C-c C-b respectively.
+You can jump into the next or previous hole in a file with C-c C-f and C-c C-b respectively.
 
 Note:
   Remember to reload the file whenever you make a change by hand.
@@ -119,14 +123,20 @@ id2 A x = {!   !}
 
 This time "A" is a normal, explicit argument (written with regular parenthases instead of curly braces), and must be specified manually.
 
-This difference is entirely syntactic and for convenience and readability. In fact, they can emulate each other with the following syntax:
+This difference is entirely syntactic and for convenience and readability. In fact, these variations can emulate each other with the following syntax:
   id {A} x
   id2 _ x
 
 This works both at the left hand side of a definition as well as when calling the function from somewhere else.
 
+In a definition, this effectively lets you decide whether to bring an argument into scope so that you can use it on the right hand side
+
+At a call site (i.e. a usage of the function) this lets you decide whether the parameter should be inferred based on the types of other arguments.
+
+In function definitions, we will almost always make types (i.e. parameters of type "Set") implicit parameters as they can usually be inferred
+
 Note:
-  We didn't *have* to give "A" the same name in the type as in the definition"
+  We didn't *have* to give "A" the same name in the type as in the definition
   In fact, we could have very well referred to "A" as x and "x" as A in the definition, and Agda wouldn't have warned us.
   Remember that when you are looking at the context of a hole, the names introduced in the definition have priority over those in the type.
 
@@ -182,6 +192,8 @@ On the other hand, if we wrote "(A, B) → A" as "A → (B → A)" from the star
   g = f x
 
 Then we can just use "f x", and we don't need to define a separate function (but nothing stops us from still writing "g y = f x y" if we desire).
+
+The fact that we can write "g = f x" and "g y = f x y" inerchangeable is sometimes referred to as η-equivalence ("eta-equivalence")
 
 If this is your first time seeing something like this, please pause and take your time to process this, as currying can be very confusing at first.
 
@@ -260,19 +272,27 @@ Function composition is a pretty classic operation, and is hard to get wrong--no
 
 As "→" associates to the right to allow for curried function types, function application associates to the left to allow curried function application.
 
-This effectively means that "foo x y z" is understood as "((foo x) y) z", which is great, but it can catch you off guard.
+This effectively means that "foo x y z" is understood as "((foo x) y) z". This is great, but it can catch you off guard.
 
-If you write "increment decrement x", for instance Agda doesn't know that you meant "increment (decrement x)", and thinks that you:
+If you write "increment decrement x", for instance, Agda doesn't know that you meant "increment (decrement x)", and thinks that you:
   A. wanted to increment "decrement"
   and
   B. wanted to apply the result of incrementing "decrement" to x
 
 Consequently you will get a possibly nasty type error, instead of being informed that you need parenthases. Try this out in compose.
 
-Once again, note the logical proposition that we have proven by defining compose:
+Another thing you can try out here is the interactive Agda command C-c C-r, called "refine". This command can do a few different things.
+
+If the type of a goal (inside of a hole) is a function type, i.e. "A → B", pressing C-c C-r in an empty hole introduces a parameter via a lambda.
+
+Alternatively if the type of a goal is "A", and you have a function which returns an "A", you can type that function into the hole and press C-c C-r.
+
+This will fill the hole with the entered function, but applied to a series of new holes, one for each necessary parameter.
+
+Finally, note once again the logical proposition that we have proven by defining compose:
   forall A B and C, if B implies C, and A implies B, then A implies C
 
-Moving on to the final topic of this exercise:
+We will now move on to the last topic of this exercise:
 
 -}
 
@@ -356,19 +376,9 @@ compose-id-id :  {A : Set} → {!   !} → {!   !}
 compose-id-id = compose id id
 
 
-
--- challenges:
-
-apply-to-self : ({A : Set} → A → A) → {!   !} → {!   !} → {!   !}
-apply-to-self f = f f
-
-[[[p→q]→p]→p]→absurd→absurd : {P Q : Set} → ((((P → Q) → P) → P) → {A : Set} → A) → {A : Set} → A
-[[[p→q]→p]→p]→absurd→absurd = {!   !}
-
-
 {-
 
-Now please feel free to mess around and experiment at the bottom of this file.
+Now please feel free to mess around and experiment.
 
 If you need some inspiration, here are some open ended exercises:
 
@@ -378,7 +388,25 @@ If you need some inspiration, here are some open ended exercises:
 
   Introduce too many variables in a lambda or function definition. Wrongly introduce an implicit variable. What happens? Why?
 
-  Define a function in terms of itself. What happens? Why?
+  Define a function in terms of itself. What happens? Why might this be?
 
   Make up some logical propositions and see if you can or can't prove them. If you can't prove them, can you show that they imply an absurdity?
+
+
+At the end of every file, you will find challenge exercises. These are purely for fun and you are not at all expected to complete them.
+
+It will likely help to come back to them after completing later exercises and gaining more intuition and experience with Agda.
+
 -}
+
+
+-- Don't worry if Agda is highlighting parts of the definition here
+-- It simply means that Agda hasn't been able to infer the implicit parameters given the (empty) type signature
+-- The solution here should use all 5 type variables
+compose2-[const-apply]-flip : {A B C D E : Set} → {!   !}
+compose2-[const-apply]-flip = compose2 (const apply) flip
+
+-- "((P → Q) → P) → P" is true. Strangely we can't prove it in Agda, but we *can* show that it implying an absurdity implies an absurdity.
+-- We will explore this phenomenon more in later exercises
+[[[[p→q]→p]→p]→absurd]→absurd : {P Q : Set} → ((((P → Q) → P) → P) → {A : Set} → A) → {A : Set} → A
+[[[[p→q]→p]→p]→absurd]→absurd = {!   !}
