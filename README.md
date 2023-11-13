@@ -1,10 +1,10 @@
 # learn-agda-by-doing-exercises
 
-A large collection of cumulative Agda exercises to aid in learning with brief and to-the-point explanations. A primary goal of this tutorial is to avoid making conceptual leaps and to introduce as few concepts as possible at once, so that each tiny concept can be explained and practiced in a maximally isolated manner. At the same time, explanations are very dense with information, so exercises (which are entire agda files) can also be used as a reference. Absolutely no prior experience is expected but due to the information-dense style, experience with programming (especially functional programming) will likely be helpful.
+A large collection of cumulative Agda exercises to aid in learning with brief and to-the-point explanations. A primary goal of this tutorial is to avoid making conceptual leaps and to introduce as few concepts as possible at once, so that each tiny concept can be explained and practiced in a maximally isolated manner. At the same time, explanations are very dense with information, so chapters (which are entire agda files) can also be used as a reference. Absolutely no prior experience is expected but due to the information-dense style, experience with programming (especially functional programming) will likely be helpful.
 
-Each exercise may be completed independently, though they generally build off of content in previous exercises. Exercises mostly use naming conventions from the Agda stdlib while providing ascii synonyms for users who don't want to type unicode symbols. This allows "Agda exercises" to double as "Agda stdlib exercises". Each exercise imports definitions from the provided solutions (in the Solutions directory) to previous exercises, so exercises do not depend on the reader's solutions (in the Exercises directory).
+Each chapter may be completed independently, though they generally build off of content in previous chapters. Exercises mostly use naming conventions from the Agda stdlib while providing ascii synonyms for users who don't want to type unicode symbols. This allows "Agda exercises" to double as "Agda stdlib exercises". Each chapter imports definitions from the provided solutions (in the Solutions directory) to previous chapters, so exercises do not depend on the reader's solutions (in the Exercises directory).
 
-To get started, [install Agda](https://agda.readthedocs.io/en/latest/getting-started/installation.html) (I promise it's worth the pain) and clone this repo. Then open Exercises/Ex0.agda (or whatever piques your interest, if you have prior experience) and start reading.
+To get started, [install Agda](https://agda.readthedocs.io/en/latest/getting-started/installation.html) (I promise it's worth the pain) and clone this repo. Then open Exercises/Ch0.agda (or whatever piques your interest, if you have prior experience) and start reading.
 
 Files may contain comments up to 150 characters long, so be prepared to turn on line wrap if your display isn't wide enough.
 
@@ -132,7 +132,7 @@ Good luck on your Agda journey!
 
 ### Part 1 - Functional Programming
 
-### Ex0 - Functions
+### Ch0 - Functions
 
 - Basic OPTIONS and top-level modules
 - Unicode support and interactive editing
@@ -145,7 +145,7 @@ Good luck on your Agda journey!
 
 ### (WIP Table of not-yet-completed Contents)
 
-### Booleans
+### Ch1 - Booleans
 
 - "import", "open", and "open import"
 - The definition of Bool

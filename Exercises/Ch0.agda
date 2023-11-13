@@ -28,13 +28,13 @@ We will start out with some options that we will be using throughout these exerc
 
 These options more or less maximize compatibility with files using other extensions of Agda.
 
-Normally these would have to be at the top of every file, but I set them as defaults within this library so they can be left out in later exercises.
+Normally these would have to be at the top of every file, but I set them as defaults within this library so they can be left out in later chapters.
 
 Now we will declare a module for this file, allowing its definitions to be accessed from other files.
 
 -}
 
-module Exercises.Ex0 where
+module Exercises.Ch0 where
 
 {-
 
@@ -69,7 +69,7 @@ Agda functions also can often be interpreted as proofs of logical propositions.
 
 In this case, we can interpret id as a proposition that forall A, A implies A.
 
-In a few exercises we will dive much deeper into the connection between programs and proofs, so this exercise will just tease the concept a bit.
+In a few chapters we will dive much deeper into the connection between programs and proofs, so this chapter will just tease the concept a bit.
 
 Now lets look at the definition of that function, aka the proof of that proposition
 
@@ -292,7 +292,7 @@ This will fill the hole with the entered function, but applied to a series of ne
 Finally, note once again the logical proposition that we have proven by defining compose:
   forall A B and C, if B implies C, and A implies B, then A implies C
 
-We will now move on to the last topic of this exercise:
+We will now move on to the last topic of this chapter:
 
 -}
 
@@ -334,13 +334,11 @@ Additionally, on the topic of readability, feel free to replace introduced varia
 
 And finally, I want to use this example to point out that we can use any characters other than () and {} in a name, such as the "→" here.
 
-If you have made it this far, Congratulations! You have finished the tutorial section of this exercise.
+If you have made it this far, Congratulations! You have finished the tutorial section of this chapter.
 
 The rest of this file consists mostly of explanation-free exercises to work through, practicing and building off of what was taught above.
 
 If you fill in all of the holes, your Agda info window should display "*All Done*".
-
-
 
 -}
 
@@ -395,7 +393,7 @@ If you need some inspiration, here are some open ended exercises:
 
 At the end of every file, you will find challenge exercises. These are purely for fun and you are not at all expected to complete them.
 
-It will likely help to come back to them after completing later exercises and gaining more intuition and experience with Agda.
+It will likely help to come back to them after completing later chapters and gaining more intuition and experience with Agda.
 
 -}
 
@@ -407,6 +405,6 @@ compose2-[const-apply]-flip : {A B C D E : Set} → {!   !}
 compose2-[const-apply]-flip = compose2 (const apply) flip
 
 -- "((P → Q) → P) → P" is true. Strangely we can't prove it in Agda, but we *can* show that it implying an absurdity implies an absurdity.
--- We will explore this phenomenon more in later exercises
+-- We will explore this phenomenon more in later chapters
 [[[[p→q]→p]→p]→absurd]→absurd : {P Q : Set} → ((((P → Q) → P) → P) → {A : Set} → A) → {A : Set} → A
 [[[[p→q]→p]→p]→absurd]→absurd = {!   !}
