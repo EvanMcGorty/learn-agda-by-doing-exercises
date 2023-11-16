@@ -1,12 +1,14 @@
-# learn-agda-by-doing-exercises
+# Learn Agda by Doing Exercises
 
-A large collection of cumulative Agda exercises to aid in learning with brief and to-the-point explanations. A primary goal of this tutorial is to avoid making conceptual leaps and to introduce as few concepts as possible at once, so that each tiny concept can be explained and practiced in a maximally isolated manner. At the same time, explanations are very dense with information, so chapters (which are entire agda files) can also be used as a reference. Absolutely no prior experience is expected but due to the information-dense style, experience with programming (especially functional programming) will likely be helpful.
+A large collection of cumulative Agda exercises to aid in learning, with brief and to-the-point explanations. A primary goal of this tutorial is to avoid making conceptual leaps and to introduce as few concepts as possible at once, so that each tiny concept can be explained and practiced in a maximally isolated manner and at a higher level of difficulty than otherwise possible. At the same time, explanations are very dense with information, so chapters (which are entire agda files) can also be used as a reference. Absolutely no prior experience is expected, but due to the information-dense style, significant experience with programming (or, even better, functional programming) will certainly be helpful.
 
-Each chapter may be completed independently, though they generally build off of content in previous chapters. Exercises mostly use naming conventions from the Agda stdlib while providing ascii synonyms for users who don't want to type unicode symbols. This allows "Agda exercises" to double as "Agda stdlib exercises". Each chapter imports definitions from the provided solutions (in the Solutions directory) to previous chapters, so exercises do not depend on the reader's solutions (in the Exercises directory).
+Each chapter may be completed independently, though they generally build off of content in previous chapters. Exercises mostly use naming conventions from the Agda stdlib while providing ascii synonyms for users who don't want to type unicode symbols. This quietly helps to condition the reader to have an easier time navigating and using the Agda stdlib, should they want to use it. Each chapter imports definitions from the provided solutions (in the Solutions directory) to previous chapters, so exercises do not depend on the reader's solutions (in the Exercises directory).
 
 To get started, [install Agda](https://agda.readthedocs.io/en/latest/getting-started/installation.html) (I promise it's worth the pain) and clone this repo. Then open Exercises/Ch0.agda (or whatever piques your interest, if you have prior experience) and start reading.
 
 Files may contain comments up to 150 characters long, so be prepared to turn on line wrap if your display isn't wide enough.
+
+This course takes a deep dive into the topics hiding behind all of the most common buzzwords used in the world of functional programming and proof assistants, i.e. Church Encoding, Category Theory, GADT, Coinduction, Setoid, Homotopy Type Theory, and much more. Take a look at table-of-contents.md for a preview of the topics that will be covered.
 
 ## Other Resources
 
@@ -127,169 +129,3 @@ These Exercises aim to be more or less exactly what I wish existed when I starte
 And finally, the most important resource (in my opinion), is to just go screw around in Agda. Try to formalize random things that interst you, play around, and have FUN.
 
 Good luck on your Agda journey!
-
-## Table of Contents
-
-### Part 1 - Functional Programming
-
-### Ch0 - Functions
-
-- Basic OPTIONS and top-level modules
-- Unicode support and interactive editing
-- Polymorphic functions
-- Normal vs implicit/inferred parameters
-- Currying
-- Lambdas
-- Higher order functions
-- Absurdities
-
-### (WIP Table of not-yet-completed Contents)
-
-### Ch1 - Booleans
-
-- "import", "open", and "open import"
-- The definition of Bool
-- Indentation and whitespace
-- Pattern matching
-- Infix operators, precedence, and confusing errors
-- Evaluating/normalizing expressions
-- Functions into Set and compile-time computations
-
-### Natural Numbers
-
-- Recursion and termination checking
-
-### Maybe
-
-- Universe levels
-
-### Lists
-
-### Part 2 - Constructive Logic
-
-### Propositions
-
-- Re-defining important functions from Ex0 with levels and stdlib-style syntax
-- Unit
-- Empty
-- Negation
-
-### Sums
-
-### Products
-
-### Part 3 - Dependent Types
-
-### Pi
-
-- Dependent pattern matching
-
-### Sigma
-
-### Recursors and Eliminators
-
-- "if then else"
-- natural-induction
-
-### GADTs
-
-- Reflects
-
-### Part 4 - Equality
-
-### Propositional Equality
-
-### Decideable Equality
-
-- instance arguments
-
-### Extensionality
-
-### Part 5 - Programming with Types
-
-### Church Encodings
-
-- Free theorems from parametricity
-
-### Finite Sets
-
-### Length-indexed Lists
-
-- Bit arrays and operations
-
-### Termination
-
-- Well founded relations
-
-### Part 6 - Mathematical Constructs
-
-### Isomorphisms
-
-- Cardinalities and operations on finite sets
-
-### Abstract Algebra
-
-- Semigroup
-- Monoid
-- Group
-
-### Setoids
-
-### Double-Negation
-
-- Double negation elimination
-- Law of excluded middle
-- Double negation shift
-
-### Part 7 - Category Theory
-
-### Categories
-
-### Functors
-
-### Natural Transformations
-
-### Monads
-
-### Monad Transformers
-
-### Part 8 - Infinity
-
-### Infinite Series
-
-### Coinduction
-
-- --guardedness
-- Stream
-- Colist
-- Delay
-- Conat
-- Bisimilarity
-
-### Cardinalities
-
-- Non-invertible functions
-- type-in-type paradox?
-
-### Part 9 - Cubical Agda
-
-### Paths
-
-- Proof of extensionality
-
-### HITs
-
-### Quotients
-
-### Univalence
-
-### Part 10 - Beyond
-
-### Logic
-
-### Set Theory
-
-- Defining various forms of set theory
-- Modeling a simple constructive set theory
-
-### Lambda Calculus

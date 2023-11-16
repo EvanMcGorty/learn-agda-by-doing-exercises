@@ -57,7 +57,7 @@ id : {A : Set} → A → A
 
 {-
 
-This is the first part of the definition of "id".
+This is the first part of the definition of "id", sometimes referred to as a "type signature".
 
 "id" takes an implicit/inferred argument which is a Set, aka a Type, and in this context we give it the name "A"
 
@@ -264,7 +264,7 @@ Moving on, lets look at some functions that themselves take other functions as p
 
 -- Note: you can put parenthases around the "A → C" to make this type (subjectively) more readable
 compose : {A B C : Set} → (B → C) → (A → B) → A → C
-compose f g x = {!   !}
+compose f g = {!   !}
 
 {-
 
@@ -338,7 +338,7 @@ If you have made it this far, Congratulations! You have finished the tutorial se
 
 The rest of this file consists mostly of explanation-free exercises to work through, practicing and building off of what was taught above.
 
-If you fill in all of the holes, your Agda info window should display "*All Done*".
+If you manage to complete all of the following exercises, then you have officially completed the chapter.
 
 -}
 
@@ -363,6 +363,15 @@ on op f x y = op (f x) (f y)
 
 compose2 : {A B C D : Set} → (C → D) → (A → B → C) → A → B → D
 compose2 f g = {!   !}
+
+owl : {A B : Set} → ((A → B) → A) → (A → B) → B
+owl f g = {!   !}
+
+map-cont : {A B C : Set} → ({!   !} → {!   !}) → ((A → C) → C) → (B → {!   !}) → {!   !}
+map-cont f g = λ h → g (λ x → h (f x))
+
+warbler-cont : {A B C : Set} → (((A → A → B) → A → B) → C) → C
+warbler-cont f = {!   !}
 
 id-id : {A : Set} → {!   !} → {!   !}
 id-id = id id
@@ -391,11 +400,21 @@ If you need some inspiration, here are some open ended exercises:
   Make up some logical propositions and see if you can or can't prove them. If you can't prove them, can you show that they imply an absurdity?
 
 
-At the end of every file, you will find challenge exercises. These are purely for fun and you are not at all expected to complete them.
+At the end of every file, you will find challenge exercises. These can be very difficult, and can even be challenging for seasoned Agda users.
 
-It will likely help to come back to them after completing later chapters and gaining more intuition and experience with Agda.
+However, they should technically be possible to complete with only the knowledge taught up to that point, so don't hesitate to try them out.
+
+Having a significant amount of experience with advanced functional programming or formal mathematics may also be very helpful.
+
+If an exercise is too hard, It may be worth coming back to them after completing later chapters and gaining more intuition and experience with Agda.
+
+Once again, these exercises can be *hard*.
+
+Have fun!
 
 -}
+
+-- challenges:
 
 
 -- Don't worry if Agda is highlighting parts of the definition here
@@ -404,7 +423,93 @@ It will likely help to come back to them after completing later chapters and gai
 compose2-[const-apply]-flip : {A B C D E : Set} → {!   !}
 compose2-[const-apply]-flip = compose2 (const apply) flip
 
--- "((P → Q) → P) → P" is true. Strangely we can't prove it in Agda, but we *can* show that it implying an absurdity implies an absurdity.
+
+-- "((P → Q) → P) → P" is true. Strangely we can't prove it in Agda, but we *can* show that it implying an absurdity implies an absurdity
 -- We will explore this phenomenon more in later chapters
 [[[[p→q]→p]→p]→absurd]→absurd : {P Q : Set} → ((((P → Q) → P) → P) → {A : Set} → A) → {A : Set} → A
 [[[[p→q]→p]→p]→absurd]→absurd = {!   !}
+
+
+-- Define a function which applies another function to itself
+-- (the definition is in a hole to prevent an ugly error message caused by the incomplete type signature)
+apply-to-self : {!   !}
+apply-to-self = {! λ f → f f !}
+
+
+-- For simple polymorphic functions, like most of what we have defined in this exercise, lambdas (i.e. introducing arguments) are actually overkill
+-- All that you really need to create any lambda term are the following two functions, called the s and k combinators:
+
+s : {A B C : Set} → (A → B → C) → (A → B) → A → C
+s = λ x y z → x z (y z)
+
+k : {A B : Set} → A → B → A
+k = λ x y → x
+
+-- Additionally, it is very convenient to use a third combinator, i, which is actually just equivalent to s k k
+
+i : {A : Set} → A → A
+i = λ x → x
+
+-- Use only s and k to define the following functions which are often called combinators. Do not introduce any arguments.
+-- You can use other functions you define here as well as write helper functions as long as their definitions also don't introduce arguments
+-- (i.e. ultimately everything is defined in terms of s and k)
+-- It may help to initially use lambdas, and then transform the expression to a point where you can substitute in a combinator
+-- In addition to this, take advantage of η-equality, i.e. "λ {...} x → f x" can be simplified to λ {...} → f
+-- Feel free to introduce and use *type* arguments if it helps, as they can effectively serve as annotations
+
+k' : {A B : Set} → B → A → A
+k' = {!   !}
+
+o : {A B : Set} → ((A → B) → A) → (A → B) → B
+o = {!   !}
+
+w : {A B : Set} → (A → A → B) → A → B
+w = {!   !}
+
+t : {A B : Set} → A → (A → B) → B
+t = {!   !}
+
+b : {A B C : Set} → (B → C) → (A → B) → A → C
+b = {!   !}
+
+c : {A B C : Set} → (A → B → C) → B → A → C
+c = {!   !}
+
+Φ : {A B C D : Set} → (B → C → D) → (A → B) → (A → C) → A → D
+Φ = {!   !}
+
+
+-- Some caveats about types and inference:
+
+-- If you have filled in these definitions, you may notice some yellow highlighting and mysterious goals in the Agda interactive window.
+-- Certain combinators, such as k, discard arguments entirely, and can end up discarding a function which takes a generic argument.
+-- This is fine, but it leaves Agda wondering what that generic parameter should be instanciated with.
+-- If this yellow highlighting is disturbing to your satisfaction of completing this file, you can luckily fix it.
+-- Because this function is being discarded, we can instanciate this type argument with literally any type we want.
+-- So, introduce any type argument to the definition, and then apply the problematic function to this type argument with curly braces.
+-- for example, the i combinator can be defined as
+-- i : {A : Set} → A → A
+-- i = s k k
+-- but the second k will end up unused and Agda's inference engine doesn't know what type to instanciate its second type argument with. So:
+-- i {A} = s k (k {_} {A})
+-- This fixes the issue by filling in this second type parameter with some arbitrary, irrelevant type. We only used "A" out of convenience
+-- If you squint at the type signatures for s and k long enough, you can see how the first argument can be inferred, as it *must* be "A".
+
+-- Another thing to be weary of is the fact that an expression reducing to something that is well typed doesn't mean that it itself is well typed.
+-- For example the following is also a valid definition of the i combinator
+-- i = s k s
+-- But without using more powerful types, this is actually invalid. We can see why as soon as we start substituting the definitions:
+-- i x == s k s x = k x (s x) = x
+-- This reduces correctly, but in an intermediate step, there is a term "s x" that ends up getting discarded.
+-- Here, s expects a function like (A → B → C), but, according to the type signature of i, x must be able to be any type.
+-- This type mismatch is, naturally, already reflected in the type of the expression "s k s", which expects a function as its argument.
+-- So, the following *does* typecheck:
+-- i' : {A B C : Set} → (A → B → C) → (A → B → C)
+-- i' = s k s
+
+-- More generally, its worth understanding that types, such as the type of s, can sometimes simply be less expressive than their definition.
+-- For example, the expression "s f g {...}" is equal to to "f {...} (g {...})".
+-- However, the type signature of s is to weak to infer a different type for {...} when f is applied to it than when g is applied to it.
+-- It requires that {...} can be instanciated as a *single* type, which both f and g can accept an argument of.
+-- So, it is absolutely possible for "f {...} (g {...})" to typecheck, but for "s f g {...}" not to typecheck
+-- Later, you will learn how to give functions more expressive types that are less prone things like this.
