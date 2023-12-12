@@ -12,7 +12,7 @@ If you successfully set up Agda with your editor of choice, then this command ha
 
 You should also see a window pop up next to the editor. This window interactively provides information about types in your Agda environment.
 
-In Agda, we load the file manually, as typechecking (upon which code highlighting can depend) can involve executing expensive computations.
+In Agda, we load files manually, as typechecking (upon which code highlighting can depend) can involve executing expensive computations.
 
 We will start out with some options that we will be using throughout these exercises.
 
@@ -28,9 +28,7 @@ We will start out with some options that we will be using throughout these exerc
 
 These options more or less maximize compatibility with files using other extensions of Agda.
 
-Normally these would have to be at the top of every file, but I set them as defaults within this library so they can be left out in later chapters.
-
-Now we will declare a module for this file, allowing its definitions to be accessed from other files.
+Now we will declare a module for this file, allowing its contents to be accessed from other files.
 
 -}
 
@@ -38,9 +36,9 @@ module Solutions.Ch0 where
 
 {-
 
-If you want to declare a module, it has to match the file name, and, in a library (like this), it needs to contain the exact path.
+If you want to declare a module, it has to match the file name, and, in a library (like this), it needs to contain the file's exact path.
 
-Agda has support for unicode, which will be used in this tutorial but will never be required for reader to use.
+Agda has support for unicode, which will be used by this tutorial but will always be optional for the reader to use.
 
 To type something in unicode, you press "\", and then type in the name corresponding to the desired symbol.
 
@@ -65,13 +63,19 @@ This results in a function of type "A → A", i.e. a function which takes an A a
 
 Computationally, this is the type of the identity function, which can be used on a value of any type (i.e. it is polymorphic or generic).
 
+This means that if there was a type Int, we could use id with it like "id 7" which would result in "7".
+
+Agda doesn't come with built in data types, so you can either define them yourself (which we will do in the coming chapters) or use a library.
+
+So, this chapter will focus on type-generic functions, which you will be able to use on the datatypes which we define in future chapters.
+
 Agda functions also can often be interpreted as proofs of logical propositions.
 
 In this case, we can interpret id as a proposition that forall A, A implies A.
 
-In a few chapters we will dive much deeper into the connection between programs and proofs, so this chapter will just tease the concept a bit.
+In later chapters we will dive much deeper into the connection between programs and proofs, so this chapter will just tease the concept a bit.
 
-Now lets look at the definition of that function, aka the proof of that proposition
+Now lets look at the definition of id (which can be logically interpreted as the proof of id)
 
 -}
 
@@ -155,6 +159,10 @@ And there is even syntactic sugar for this, namely
   id2 : ∀ A → A → A
 
 "∀" can be written by typing "\all", or, if you don't like unicode, you can just write "forall".
+
+Don't worry if this is very confusing, as these nitty-gritty details are not critical to understand right away.
+
+You will slowly pick up an intuitive understanding of implicitness and inference as you learn, and you can always reference this section as necessary.
 
 Moving on, here is another definition for you to fill in:
 
@@ -242,9 +250,9 @@ const3 : {A B : Set} → A → B → A
 
 {-
 
-Once again, nothing to important here, but a bit more syntactic sugar which is worth remembering:
+Once again, nothing too important here, but a bit more syntactic sugar which is worth remembering:
 
-Because A and B are both "Sets", we can write them within the same parenthases/braces.
+Because A and B are both "Sets", we can write them within the same parenthases/braces, though in reality they are still separate parameters.
 
 -}
 
@@ -275,9 +283,9 @@ As "→" associates to the right to allow for curried function types, function a
 This effectively means that "foo x y z" is understood as "((foo x) y) z". This is great, but it can catch you off guard.
 
 If you write "increment decrement x", for instance, Agda doesn't know that you meant "increment (decrement x)", and thinks that you:
-  A. wanted to increment "decrement"
+  A. wanted to increment "decrement" (which makes no sense)
   and
-  B. wanted to apply the result of incrementing "decrement" to x
+  B. wanted to apply the result of incrementing "decrement" to x (which also makes no sense)
 
 Consequently you will get a possibly nasty type error, instead of being informed that you need parenthases. Try this out in compose.
 

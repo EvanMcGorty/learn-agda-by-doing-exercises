@@ -1,8 +1,12 @@
+{-# OPTIONS --safe --cubical-compatible #-}
+
 {-
 
 Welcome to the next chapter.
 
-This file will define an actual data type, the booleans, and explore what we can do with them.
+This file will define an actual concrete data type, the booleans, and explore what kinds of functions we can write with them.
+
+We will also learn how to define aliases for types and write some basic type level functions.
 
 Once again, we will start out with a module declaration.
 
@@ -40,11 +44,21 @@ This definition declares a data type, "Bool", which is a Set (i.e. a type).
 
 Furthurmore it declares that there is a Bool named "false", and a Bool named "true".
 
-false and true are also called constructors, as they are ways to construct a Bool.
+false and true are called constructors, as they are ways to construct a Bool.
 
-It is important to understand that Bool cannot be extended, so we can assume false and true are the *only* values of type Bool.
+In Agda, no data types are automatically baked directly into the language, so we either have to define to define them by hand or use a library.
 
-It is also important to understand that Bool is *only* a datatype, and has nothing to do with proofs/propositions in Agda.
+So, this is kind of like manually writing the following definition in a more traditional programming langauge:
+
+  abstract class Bool
+
+  class False extends Bool
+
+  class True extends Bool
+
+It is important to understand that Bool cannot be extended any further, so we can assume false and true are the *only* values of type Bool.
+
+It is also important to understand that Bool is *only* a datatype, and has nothing to do with proofs and propositions in Agda.
 
 Its only purpose is for computation, i.e. we could have very well named it "Bit" with constructors "off" and "on".
 
@@ -137,9 +151,11 @@ This is also completely valid.
 
 However, it's important to be understand how pattern matching definitions are evaluated in such cases.
 
-When pattern matching, a variable is comparedagainst each case one by one, *top to bottom*.
+When pattern matching, a variable is compared against each case one by one, *top to bottom*.
 
 So, only the *first* matching case is the one which will be chosen, and the rest will be ignored.
+
+However, while both true and false are always considered valid "patterns", a variable binding is as well, and can be used alongside them.
 
 This allows for cases, where the definition isn't actually a true equality, i.e. "idBool8 x = true".
 
@@ -151,12 +167,16 @@ Additionally, if you have a case that is entirely unreachable, Agda will also wa
 
 In fact, try creating such an example. I encourage the reader to pause and experiment:
 
+(Hint: you need to manage the cases/patterns yourself, C-c C-c alone won't be enough)
+
 -}
 
 idBool9 : Bool → Bool
 idBool9 x = {!   !}
 
 {-
+
+It can however still be very useful to write code without overlapping cases, which can make it easier to reason about the correctness of code.
 
 Another useful interactive command is normalize (a fancy word for "evaluate"), which lets you actually run code.
 
@@ -195,7 +215,7 @@ _||_ = _∨_
 
 Here you probably immediately notice the strange use of underscores. Names with underscores are able to be used with operator-like syntax.
 
-i.e. if we defined _foo_bar_baz_, not only could we write "_foo_bar_baz_ a b c d", but we can also write "a foo b bar c baz d".
+For example, if we defined _foo_bar_baz_, not only can we write "_foo_bar_baz_ a b c d", but we can also write "a foo b bar c baz d".
 
 This feature of Agda, called "mixfix", is of course more than enough to define some simple infix operators, as we have done above.
 
@@ -452,7 +472,7 @@ six a b c d e = {!   !}
 
 seven a b c d e = {!   !}
 
--- hint: At this point, you don't have access to any kind of recursion yet, so your definitions need to contain an easy-to-write number of steps.
+-- hint: At this point, we don't have access to any kind of recursion yet, so our definitions need to contain an easy-to-write number of steps.
 --       Define operations on this type using 5 steps of boilerplate/recursion rather than with 2^5 or 2^2^5 steps of boilerplate/recursion.
 
 isZero : Uint32 → Bool
