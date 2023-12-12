@@ -29,10 +29,6 @@ Exercises primarily build comfort with Agda syntax and interactive editing, whil
 - Type aliases, functions into Set, and compile-time computation
 - Church-encoded Bool
 
-## (WIP Table of not-yet-completed Contents)
-
-This section is just for me, so I can develop an overall plan and save ideas for later.
-
 ### Natural Numbers
 
 - open import using (...)
@@ -42,6 +38,10 @@ This section is just for me, so I can develop an overall plan and save ideas for
 - BUILTIN pragmas
 - Inductive reasoning about correctness
 - Church-encoded Nat
+
+## (WIP Table of not-yet-completed Contents)
+
+This section is just for me, so I can develop an overall plan and save ideas for later.
 
 ### Products
 
