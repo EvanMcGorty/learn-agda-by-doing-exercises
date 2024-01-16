@@ -37,6 +37,8 @@ Now get ready for a definition:
 data Bool : Set where
   false : Bool
   true : Bool
+-- In Agda we use whitespace instead of tabs, and we indent in increments of two spaces
+-- Your editor should be smart enough to handle this automatically when you press tab
 
 {-
 
@@ -124,6 +126,8 @@ This can be done by hand, but instead we will use a new interactive command, cal
 To case split, type an argument which you wish to inspect into the hole, and press C-c C-c.
 
 This allows you to define a result for each constructor defined in the data declaration of the data type.
+
+Note: at this point, C-c C-f and C-c C-b to move back and forth between holes become very helpful, remember to use them
 
 Funnily enough, this even gives us another way to define the identity function:
 
@@ -240,7 +244,7 @@ unpick f = {!   !}
 
 {-
 
-Notice how we can introduce a generic parameter anywhere we want. For any Bool, pick returns a generic function.
+Notice how we can introduce a generic parameter anywhere we want, i.e. for any Bool, pick returns a generic function.
 
 Likewise, unpick *accepts* a generic function but itself is actually not generic.
 
@@ -252,7 +256,11 @@ For the last topic of this chapter, we will take a peek at some type-level progr
 
 In Agda, types are actually just values and can consequently be used wherever you might normally use values.
 
-This means that we can even define functions that return Sets, and use them in type signatures:
+This means that we can even define functions that return Sets, and use them in type signatures.
+
+The Symbol "Set" is not only used to quantify over generic type-parameters, but is actually itself just another Type, like "Bool".
+
+This means that we can write a function which returns a Set, and can use it in a type expression:
 
 -}
 
@@ -383,6 +391,7 @@ infix  0 if_then_else_
 if_then_else_ : {A : Set} → Bool → A → A → A
 if b then x else y = {!   !}
 
+
 -- Keep an eye out for oportunities to use higher-order-functions defined in Ch0
 
 combinePredicatesWith : {A : Set} → (Bool → Bool → Bool) → Predicate A → Predicate A → Predicate A
@@ -445,6 +454,53 @@ testTransitivityWith x y z p = {!   !}
 testCongruenceWith : {A : Set} → A → A → (A → A) → Relation A → Bool
 testCongruenceWith x y f p = {!   !} 
 
+-- We can decently represent a typical "Set<A>" data type as a predicate on A
+-- This is like defining Set<A> purely in terms of the behavior of its .contains function
+-- However if we already think of "A" itself as a Set, then we should rather think of "Set<A>" as more like the Set of all *subsets* of A.
+SubsetOf : Set → Set
+SubsetOf A = Predicate A
+
+contains : {A : Set} → SubsetOf A → A → Bool
+contains a x = a x
+
+-- The empty set
+∅ : {A : Set} → SubsetOf A
+∅ = {!   !}
+
+-- The union of two sets
+_∪_ : {A : Set} → SubsetOf A → SubsetOf A → SubsetOf A
+a ∪ b = {!   !}
+
+-- The intersection of two sets
+_∩_ : {A : Set} → SubsetOf A → SubsetOf A → SubsetOf A
+a ∩ b = {!   !}
+
+-- The difference of one set from another
+_∖_ : {A : Set} → SubsetOf A → SubsetOf A → SubsetOf A
+a ∖ b = {!   !}
+
+-- There are quite a few operations on SubsetOf that we can't seem to define, such as insertion or equality comparison.
+-- This is because these operations are not computationally decideable without more information about the specific "A" we are working with.
+-- Insertion requires a way to compare two "A"s for equality, which we cant do without knowing what type that A is.
+-- Equality comparison of two "Subset A"s is even worse, as it requires us to be able to finitely enumerate every A.
+-- Eventually, we will be able to prove the mere existence of these functions, but they cannot be defined constructively in Agda.
+-- (Though they can of course be defined if they require A to have the necessary properties, which we will soon learn how to do)
+
+
+{-
+
+open-ended exercises:
+
+Define a type "Trool" with constructors "yes", "no" and "maybe".
+  Define some operations for performing "trinary logic".
+  What kinds of laws and properties do these operations have?
+  How do they compare to their corresponding Boolean operations?
+
+Define a type "QuadrantalAngle" with constructors "0-deg", "90-deg", "180-deg", and "270-deg".
+  Define some operations on this type.
+  Prove some laws about these operations.
+
+-}
 
 
 -- challenges:

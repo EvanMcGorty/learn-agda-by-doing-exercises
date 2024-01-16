@@ -24,46 +24,51 @@ Exercises primarily build comfort with Agda syntax and interactive editing, whil
 - "import", "open", and "open import"
 - The definition of Bool
 - Pattern matching with Bool
-- Infix operators, precedence, and confusing errors
+- "Mixfix" operators, precedence, and confusing errors
 - Evaluating/normalizing expressions
 - Type aliases, functions into Set, and compile-time computation
+- Variants of interactive Agda commands (i.e. "C-c", "C-y", and "C-u")
 - Church-encoded Bool
 
-### Natural Numbers
+### Ch2 - Natural Numbers
 
 - open import using (...)
 - The definition of the natural numbers
 - Pattern matching on natural numbers
 - Recursion and termination checking
 - BUILTIN pragmas
+- Defining types via recursion over natural numbers
 - Inductive reasoning about correctness
-- Church-encoded Nat
+- Church-encoded natural numbers
+
+### Ch3 - Product Types
+
+- Simple products via 'data' and 'record' declarations
+- let bindings and where clauses
+- A generic Pair type and its logical meaning
+- Bijections, aka Isomorphisms (between Sets)
+- Pattern matching lambdas
+- The term "product"
+- Exponent Types?
+- Church-encoded products
 
 ## (WIP Table of not-yet-completed Contents)
 
+### Ch4 - Sigma Types
+
+- Universe Levels and Universe Polymorphism
+- Explicit polymorphic parameters
+- Set-dependent-records
+- Value-dependent-records
+- Basic dependent pattern matching
+- A generic dependent pair type and its logical meaning
+- The term "sigma"
+
 This section is just for me, so I can develop an overall plan and save ideas for later.
-
-### Products
-
-- Simple records
-- A generalized Pair type
-- Levels and universe polymorphism
-- Dependent records
-- (Raw) Magmas, Semigroups, Monoids, Groups
-- Simple dependent pattern matching
-- Sigma
-
-### Typeclasses
-
-- Instance arguments
-- Eq
-- Ord
-- Enum
-- Ix
 
 ## Part 2 - Functional Programming
 
-With a firm grasp over all of Agda's basic features, we dive into functional programming in Agda.
+With a firm grasp over most of Agda's basic features, we dive into functional programming in Agda.
 This part should leave the reader with a firm understanding of all the most central themes that might be found in a typical haskell tutorial.
 
 ### Maybe
@@ -73,6 +78,14 @@ This part should leave the reader with a firm understanding of all the most cent
 ### List
 
 - Correct-by-construction code
+
+### Typeclasses
+
+- Instance arguments
+- Eq
+- Ord
+- Enum
+- Ix
 
 ### Sums
 
@@ -94,7 +107,7 @@ This part should leave the reader with a firm understanding of all the most cent
 
 ## Part 3 - Dependent Types
 
-### Dependent Functions
+### Pi
 
 ### Recursors and Eliminators
 

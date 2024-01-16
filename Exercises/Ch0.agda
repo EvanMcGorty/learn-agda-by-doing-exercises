@@ -104,6 +104,8 @@ Finally, C-c C-. lets you inspect the type of the expression currently typed int
 
 You can jump into the next or previous hole in a file with C-c C-f and C-c C-b respectively.
 
+Take a second to try all of this out. Holes, and interactive commands are really nice to work with once you get used to them.
+
 Note:
   Remember to reload the file whenever you make a change by hand.
   Agda's interactive commands are not aware of any changes you made since the last reload.
@@ -173,13 +175,13 @@ const x y = {!   !}
 
 {-
 
-At this point, you may be wondering why function types are written so strangely with "→".
+At this point, you may be wondering why function types are written so strangely with multiple "→"s.
 
 In a more typical language, you would expect to see something like "(A, B) → A" ("A" and "B" to "A") instead of "A → B → A" ("A" to "B" to "A").
 
 However, these two forms are effectively equivalent, and using the latter in place of the former is often referred to as "currying".
 
-"→" Associates to the right, which is another way of saying that "A → B → A" is understood as "A → (B → A)" rather than "(A → B) → A".
+Syntactically, "→" associates to the right, which is another way of saying that "A → B → A" is understood as "A → (B → A)" rather than "(A → B) → A".
 
 So, "A → B → A" aka "A → (B → A)" is a function which takes an "A", and returns another function which takes a "B" and returns an "A".
 
@@ -193,15 +195,15 @@ So, from a logical perspective "const" can practically be interpreted as a proof
 
 Currying is mainly done for syntactic convenience. By writing all of our functions as chains of single-argument functions, we eliminate redundancy.
 
-If I have a "(A, B) → A" (named "f") and an "A" (named "x"), and I want a "B → A" (named "g"), I effectively need to do the following:
+For example, if I have a "(A, B) → C" (named "f") and an "A" (named "x"), and I want a "B → C" (named "g"), I effectively need to do the following:
   g y = f (x, y)
 
-On the other hand, if we wrote "(A, B) → A" as "A → (B → A)" from the start, all we need to do is apply f to x:
+On the other hand, if we wrote "(A, B) → C" as "A → (B → C)" from the start, all we need to do is apply f to x:
   g = f x
 
 Then we can just use "f x", and we don't need to define a separate function (but nothing stops us from still writing "g y = f x y" if we desire).
 
-The fact that we can write "g = f x" and "g y = f x y" inerchangeable is sometimes referred to as η-equivalence ("eta-equivalence")
+The fact that we can write "g = f x" and "g y = f x y" inerchangeably is sometimes referred to as η-equivalence ("eta-equivalence")
 
 If this is your first time seeing something like this, please pause and take your time to process this, as currying can be very confusing at first.
 
@@ -227,7 +229,7 @@ const2 x = λ y → {!   !}
 
 So, what the hell is going on here? The expression to the right of the "=" is called a lambda, which is more or less an anonymous function definition.
 
-"λ" is the greek letter lambda, and can be typed as "\Gl" (can be remembered as "Greek lowercase l"), or also simply as "\lambda".
+"λ" is the greek letter lambda, and can be typed as "\Gl" (and can be remembered as "Greek lowercase l"), or also simply as "\lambda".
 
 Those who want to avoid unicode can simply use a backslash in place of "λ", which is typed as "\\" if unicode typing is enabled in your editor.
 
@@ -276,7 +278,7 @@ compose f g = {!   !}
 
 {-
 
-Function composition is a pretty classic operation, and is hard to get wrong--nonetheless I urge you to be careful with the syntax in Agda.
+Function composition is a pretty classic operation, and is hard to get wrong. Nonetheless I urge you to be careful with the syntax in Agda.
 
 As "→" associates to the right to allow for curried function types, function application associates to the left to allow curried function application.
 
@@ -297,7 +299,14 @@ Alternatively if the type of a goal is "A", and you have a function which return
 
 This will fill the hole with the entered function, but applied to a series of new holes, one for each necessary parameter.
 
-Finally, note once again the logical proposition that we have proven by defining compose:
+Finally, you can type in a valid expression which itself contains holes (which you type in as '?'s), and refine so that only those holes remain.
+  (note: this can also be done with C-c C-space)
+
+If the new expression would not type check though, you will just get an error in the interactive window.
+
+Be sure to practice using all of these to write definitions piece by piece while taking advantage of C-c C-, and C-c C-.
+
+Let's also note once again the logical proposition that we have proven by defining compose:
   forall A B and C, if B implies C, and A implies B, then A implies C
 
 We will now move on to the last topic of this chapter:
@@ -346,7 +355,23 @@ If you have made it this far, Congratulations! You have finished the tutorial se
 
 The rest of this file consists mostly of explanation-free exercises to work through, practicing and building off of what was taught above.
 
-If you manage to complete all of the following exercises, then you have officially completed the chapter.
+The content in this section is somewhat optional, so you can skip exercises if you are confident in your ability to complete them.
+
+Nonetheless, these exercises are very valuable practice, and skipping too many of them may cause you to have difficulty with later chapters.
+
+If you manage to complete all of them, which I recommend trying to do, then you have officially completed the chapter.
+
+Make sure to practice all of the interactive commands discussed so far:
+
+C-c C-l     Load File
+C-c C-space Fill in hole (or refine to new, more deeply nested holes written inside as '?'s)
+C-c C-a     Auto Complete
+C-c C-,     Show context of current hole (in-scope variables)
+C-c C-.     Show context and Goal type of current hole
+C-c C-f     Move to next hole after cursor
+C-c C-b     Move to previous hole from the cursor
+C-c C-s     Infer type (or more generally, "solve constraint")
+C-c C-r     Refine (automatically itroduce lambda, automatically apply given function to new holes, or otherwise do the same as C-c C-space)
 
 -}
 
@@ -395,18 +420,25 @@ compose-id-id = compose id id
 
 Now please feel free to mess around and experiment.
 
-If you need some inspiration, here are some open ended exercises:
+If you need inspiration, every chapter will give a few open-ended exercises to get you started.
 
-  Enter in an incorrect solution, i.e. "const x y = y" and look at what kinds of errors you can get.
+open-ended exercises:
 
-  Move an implicit parameter (like {B : Set}) to different positions within a function type. When does this work? When does this not work?
+Enter in an incorrect solution, i.e. "const x y = y" and look at what kinds of errors you get.
 
-  Introduce too many variables in a lambda or function definition. Wrongly introduce an implicit variable. What happens? Why?
+Move an implicit parameter (like {B : Set}) to different positions within a function type. When does this work? When does this not work?
 
-  Define a function in terms of itself. What happens? Why might this be?
+Introduce too many variables in a lambda or function definition. Wrongly introduce an implicit variable. What happens? Why?
 
-  Make up some logical propositions and see if you can or can't prove them. If you can't prove them, can you show that they imply an absurdity?
+Define a function in terms of itself. What happens? Why might this be?
 
+Make up some logical propositions and see if you can or can't prove them. If you can't prove them, can you show that they imply an absurdity?
+
+-}
+
+
+
+{-
 
 At the end of every file, you will find challenge exercises. These can be very difficult, and can even be challenging for seasoned Agda users.
 

@@ -73,7 +73,11 @@ three = {!   !}
 
 seven : ℕ
 seven = {!   !}
--- Don't worry if this seems tedious, we will soon explore how to write numbers with cleaner syntax.
+-- Don't worry if this seems tedious, we will soon explore how to write large numbers with more reasonable syntax.
+
+boolToBitValue : Bool → ℕ
+boolToBitValue false = zero
+boolToBitValue true = suc zero
 
 {-
 
@@ -415,7 +419,9 @@ _<=b_ = _≤ᵇ_
 
 A lot of these operations seem to come down to more or less just doing something n times.
 
-In fact, the ability to do something n times is actually (technically) all we need to perform any arbitrary computation with ℕ:
+In fact, the ability to do something n times is actually all we technically need to perform any arbitrary computation with ℕ.
+
+In practice this can be sometimes very hard without access to other useful datatypes, but for simple recursive functions it's often pretty doable:
 
 -}
 
@@ -503,7 +509,7 @@ The inductive step holds because, by definition "2^ (n + 1) ≡ 2* 2^ n", and we
 
   (notice how the correctness of the recursive call is exactly what we get to assume in the inductive step)
 
-We know from math class that "2 × 2ⁿ ≡ 2ⁿ⁺¹", and so we have "2^ (n + 1) ≡ 2ⁿ⁺¹", proving the inductive step.
+Finally, we know from math class that "2 × 2ⁿ ≡ 2ⁿ⁺¹", and so we have "2^ (n + 1) ≡ 2ⁿ⁺¹", proving the inductive step.
 
 The only thing missing is a proof that your definition of "2* n" is the same as "2 × n" from math class, which I leave to the reader.
 
@@ -523,9 +529,18 @@ With ℕ, for instance, we can recurse with a different form, corresponding to a
 
   if P(0) and P(1) and P(n) => P(n+2), then P holds for all natural numbers.
 
+Which would correspond to pattern matching and recursing like
+
+foo zero = ...
+foo (suc zero) = ...
+foo (suc (suc n)) = ... foo n ...
+
 We will explore this idea more deeply in coming chapters, both informally and even formally, but until then, here are some more exercises:
 
 -}
+
+infixr 8 _^_
+infix  8 _!
 
 -- Division by 2, rounded down, written with \lfloor and \rfloor
 ⌊_/2⌋ halve : ℕ → ℕ
@@ -542,6 +557,10 @@ halveRoundedUp = ⌈_/2⌉
 -- Exponentiation
 _^_ : ℕ → ℕ → ℕ
 x ^ n = {!   !}
+
+-- Factorial
+_! : ℕ → ℕ
+n ! = {!   !}
 
 -- Summation of a function up to a bound
 sum-of_until_ : (ℕ → ℕ) → ℕ → ℕ
@@ -620,6 +639,31 @@ scan : {A B : Set} → (B → A → B) → B → Stream A → Stream B
 scan op x stream = {!   !}
 
 
+{-
+
+open-ended exercises:
+
+Use induction to prove some properties about your definitions, such as:
+  ∀ n, isEven (2* n) ≡ true
+  ∀ n, 1 + n ≡ n + 1
+  ∀ n m, n + m ≡ n +' m
+  ∀ n m, n * m ≡ m * n
+  ∀ n m, (n < m) ∧ (m < n) ≡ false
+
+Define ℤ (aka Int) as a recursive data type like ℕ, along with some operations.
+  Make sure there is exactly one way to represent each Integer.
+
+Define a recursive data type which can represent expressions of the SKI combinator calculus.
+  Can you write a function to fully reduce an SKI expression?
+
+Define a data type with no "base case", and only a "recursive case".
+  Can you construct an instance of this type?
+  If not, can you show that an instance of this type is absurd (i.e. that it implies an absurdity)?
+
+-}
+
+
+
 -- challenges:
      
 
@@ -672,5 +716,5 @@ mod-helper k m n j = {!   !}
 _/[1+_] : ℕ → ℕ → ℕ
 n /[1+ m ] = div-helper 0 m n m
 
-_%[1+_] : ℕ → ℕ → ℕ   
+_%[1+_] : ℕ → ℕ → ℕ
 n %[1+ m ] = mod-helper 0 m n m
