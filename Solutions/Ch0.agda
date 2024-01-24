@@ -2,11 +2,21 @@
 
 Welcome. This is an Agda multi-line comment.
 
-This file is just going to zoom through some of the formalities and basics in Agda.
+Make sure your setup can display 150 character lines in a way that is comfortable for you to read (e.g. word-wrap).
 
-It is not at all necessary to fully internalize all the information in this file before moving on, but be prepared to reference it as necessary.
+Each chapter of this tutorial starts by introducing some concepts or language features, along with simple definitions for the reader to fill in.
 
-Press "C-c C-l". This is Agda speak for "Press CTRL c, and then press CTRL l". Agda commands usually start with CTRL c.
+After this, there is a large set of exercises in the form of incomplete definitions, a few open-ended exercises, and then some extra-hard challenges.
+
+This chapter is just going to zoom through some of the formalities and basics in Agda.
+
+It is not at all necessary to fully internalize everything in this chapter before moving on, but just be prepared to reference it as necessary.
+
+You will also re-practice everything here throughout the next chapters, with more concrete and motivating use-cases.
+
+Now, lets get started:
+
+Press "C-c C-l". This is Agda speak for "Press CTRL c followed by CTRL l". Agda commands usually start with CTRL c.
 
 If you successfully set up Agda with your editor of choice, then this command has loaded this Agda file and your text now has highligting.
 
@@ -14,7 +24,7 @@ You should also see a window pop up next to the editor. This window interactivel
 
 In Agda, we load files manually, as typechecking (upon which code highlighting can depend) can involve executing expensive computations.
 
-We will start out with some options that we will be using throughout these exercises.
+We will start out with some options that we will be using throughout this tutorial.
 
 -}
 
@@ -38,7 +48,7 @@ module Solutions.Ch0 where
 
 If you want to declare a module, it has to match the file name, and, in a library (like this), it needs to contain the file's exact path.
 
-Agda has support for unicode, which will be used by this tutorial but will always be optional for the reader to use.
+Agda has support for unicode, which will be used in this tutorial but will always be optional for the reader to type.
 
 To type something in unicode, you press "\", and then type in the name corresponding to the desired symbol.
 
@@ -55,27 +65,27 @@ id : {A : Set} → A → A
 
 {-
 
-This is the first part of the definition of "id", sometimes referred to as a "type signature".
+This is the first part of the definition of "id", sometimes referred to as a "type signature", and it says the following:
 
 "id" takes an implicit/inferred argument which is a Set, aka a Type, and in this context we give it the name "A"
 
-This results in a function of type "A → A", i.e. a function which takes an A and returns an A.
+This produces a function of type "A → A", i.e. a function which takes an A and returns an A.
 
-Computationally, this is the type of the identity function, which can be used on a value of any type (i.e. it is polymorphic or generic).
+Computationally, this is the type of the polymorphic identity function, polymorphic meaning that it can be used on a value of any type
 
-This means that if there was a type Int, we could use id with it like "id 7" which would result in "7".
+This means that if we had a typical "Int" type, then we could use id with it like "id 7", which would presumably result in "7".
 
-Agda doesn't come with built in data types, so you can either define them yourself (which we will do in the coming chapters) or use a library.
+Agda doesn't come with built in data types, so you can either use a library, or define them yourself, which we will do in the coming chapters.
 
-So, this chapter will focus on type-generic functions, which you will be able to use on the datatypes which we define in future chapters.
+So, this chapter will focus on polymorphic functions, which you will be able to use on the data types defined in future chapters.
 
-Agda functions also can often be interpreted as proofs of logical propositions.
+Thinking of typical data types and functions as "Sets" (a la Set Theory) can be useful for formally reasoning about programs.
 
-In this case, we can interpret id as a proposition that forall A, A implies A.
+However, the fact that we denote types with the identifier "Set" is not particularly significant (and it can even be renamed if necessary).
 
-In later chapters we will dive much deeper into the connection between programs and proofs, so this chapter will just tease the concept a bit.
+Types in programming have a lot in common with Sets from Set Theory, but "Set"s in Agda are not exactly the same as "Sets" in Set Theory.
 
-Now lets look at the definition of id (which can be logically interpreted as the proof of id)
+Now, lets look at the definition of id:
 
 -}
 
@@ -86,7 +96,13 @@ id x = x
 
 What's that weird curly-brace thing? That's a hole. It means you haven't defined the function yet, but still wanted to load the file.
 
-You can fill in this hole by typing something into it, making sure your cursor is in the hole, and pressing C-c C-space.
+Being a functional programming language, Agda doesn't really have return statements or other imperative statements.
+
+Instead, we just define functions to be equal to expressions which use the function's arguments.
+
+This might seem strange or restrictive at first, but ends up being very pleasant when you get used to it, and has a number of advantages.
+
+You can fill in the hole by typing something into it, and pressing C-c C-space (as long as your cursor is still inside of it).
 
 If you typed something invalid into the hole (i.e. it doesn't typecheck), you will get an error message explaining why.
 
@@ -96,13 +112,13 @@ For the sake of learning, C-c C-a should be avoided. It is best used as a tool t
 
 To place a hole, you dont have to actually type out "{!!}", you can just type "?" and reload the file.
 
-Holes can be placed anywhere in an expression or type (and even multiple times), and are a way of saying "so far, this expression typechecks".
+Holes can be placed anywhere in an expression or type, even multiple times, and are a way of saying "so far, this expression typechecks".
 
 You can also inspect the context in the hole with C-c C-, to see what is available to be used in it.
 
 Finally, C-c C-. lets you inspect the type of the expression currently typed into the hole, in addition to the context.
 
-You can jump into the next or previous hole in a file with C-c C-f and C-c C-b respectively.
+You can jump into the next or previous hole in a file with C-c C-f and C-c C-b respectively (which is espcially nice when using vim or emacs).
 
 Take a second to try all of this out. Holes, and interactive commands are really nice to work with once you get used to them.
 
@@ -112,59 +128,94 @@ Note:
   This can lead to confusing issues if you forget to reload before running a command.
   Also, don't forget that your cursor has to be in a hole for most commands.
 
-Normally a type and a definition are right next to each other, like:
-foo : ...
-foo = ...
-but we are still able to put comments in between them if we wish, as will be done frequently in these exercises.
-
-Lets look at another way to declare id:
+Lets look at another way to define id:
 
 -}
 
-
-id2 : (A : Set) → A → A
-id2 A x = x
+-- Here we are putting the type signature and the definition of id2 right next to each other
+-- This is not required but is more typical.
+id2 : {A : Set} → A → A
+id2 {A} x = id {A} x
 
 {-
 
-This time "A" is a normal, explicit argument (written with regular parenthases instead of curly braces), and must be specified manually.
+This time, we have introduced the generic type argument in the definition of id2, bringing it into scope.
 
-This difference is entirely syntactic and for convenience and readability. In fact, these variations can emulate each other with the following syntax:
-  id {A} x
-  id2 _ x
+In Agda, functions can be applied to implicit arguments with curly braces, i.e. "myPolymorphicFunction {myTypeParameter} ...".
 
-This works both at the left hand side of a definition as well as when calling the function from somewhere else.
+Here, you could define id2 in terms of id, by simply filling the hole in with "id x", and the type parameter would be inferred automatically.
 
-In a definition, this effectively lets you decide whether to bring an argument into scope so that you can use it on the right hand side
+However, now that "A" is in scope at the definition, you could also explicitly apply the implicit parameter, like "id {A} x".
 
-At a call site (i.e. a usage of the function) this lets you decide whether the parameter should be inferred based on the types of other arguments.
+You can also place a hole in the type parameter like "id {?} x", and use C-c C-s to "solve" this type constraint, if it can be inferred.
 
-In function definitions, we will almost always make types (i.e. parameters of type "Set") implicit parameters as they can usually be inferred
+It's critical though, that we introduce the implicit parameter like we have here, as the definition is completely independent from the type signature.
 
-Note:
-  We didn't *have* to give "A" the same name in the type as in the definition
-  In fact, we could have very well referred to "A" as x and "x" as A in the definition, and Agda wouldn't have warned us.
-  Remember that when you are looking at the context of a hole, the names introduced in the definition have priority over those in the type.
+Identifiers in scope in the type signature have no relation to those in scope at the definition.
 
-Inference, either for an implicit (curly braces) parameter, or forced by an underscore, will only result in a provably unique solution.
+In fact, we don't even have to give it the same name in the definition as we did in the type signature:
 
-Similarly, you can use C-c C-s in a hole to ask Agda to actually write out the unique solution that it would infer there (similarly to C-c C-a)
+-}
 
-When something can't be inferred, the text will be highlighted in yellow and inform you what information is missing.
+id3 : {A : Set} → A → A
+id3 {SomeReallyCoolType} x = id {SomeReallyCoolType} x
 
-Inference can even be used in a type, like:
-  id : {A : _} → A → A
-  id2 : (A : _) → A → A
+{-
 
-And there is even syntactic sugar for this, namely
-  id : ∀ {A} → A → A
-  id2 : ∀ A → A → A
+If you inspect the context in the hole, you will see that Agda now plugs the introduced name into the polymorphic type from the type signature.
 
-"∀" can be written by typing "\all", or, if you don't like unicode, you can just write "forall".
+In most more typical programming languages, functions are not defined like this, and id would probably be written something like:
 
-Don't worry if this is very confusing, as these nitty-gritty details are not critical to understand right away.
+def id<A>(A x) -> A {
+  return x
+}
 
-You will slowly pick up an intuitive understanding of implicitness and inference as you learn, and you can always reference this section as necessary.
+Here, the type of id3 and the definition of id3 are mixed together, which can make it a bit easier to read initially.
+
+There are a number of advantages, however, to drawing a more strict distinction between types and definitions.
+
+For instance, if we are only interested in defining one function directly in terms of another, then there is a more direct way of doing this:
+
+-}
+
+id4 : {A : Set} → A → A
+id4 = id
+
+{-
+
+In Agda, as in many functional programming languages, we say that functions are "first-class citizens", meaning that they are just regular values.
+
+This means that we can define one function to simply be equal to another function of the same exact type, without threading around parameters.
+
+In most programming languages, a function is a special kind of declaration, but in Agda, functions are no more special than Ints, or Strings.
+
+In fact, unlike in the vast majority of languages, even polymorphic functions are "first-class", and can be passed around like regular objects.
+
+All of this allows us to give every identifier a clear and unambiguous type, which is completely separate from its definition.
+
+Types are very special in Agda, as, among other things, we can often interpret them as logical propositions.
+
+This actually can be done to at least *some* degree in the majority typed programming languages with polymorphism.
+
+The idea behind this is to conceptually collapse Sets down so that we only care about whether they are empty or inhabited (aka nonempty).
+
+In our case, "Sets" are our types, and a type is inhabited when we can construct a value of it, and empty when this is impossible.
+
+If the nonemptyness of a Set is equivalent to a meaningful proposition, then constructing element of that Set is a proof of said proposition.
+
+So when we "interpret" a Set/Type as a proposition, we simply understand it to be false if it is empty, and true if it is inhabited.
+
+A function from A to B can then be interpreted as a proof that "the proposition corresponding to A implies the proposition corresponding to B".
+
+We justify this by the fact that the Set of all functions from A to B is nonempty if and only if A being nonempty implies that B is nonempty.
+
+In this case, we can interpret "id" as a proposition that forall A, A implies A.
+
+This can be very confusing at first and is not critical to completely understand, so don't worry if you don't quite get it yet.
+
+The idea of an empty Type, i.e. a Type which you cannot construct a value of, also may sound strange, and is foreign to most programming languages.
+
+However we will soon see examples of "empty" types, and you will get used to all these ideas intuitively just by working through this tutorial.
 
 Moving on, here is another definition for you to fill in:
 
@@ -175,61 +226,110 @@ const x y = x
 
 {-
 
-At this point, you may be wondering why function types are written so strangely with multiple "→"s.
+This function, for any two types "A" and "B", takes an "A" which it calls "x", and a "B" which it calls "y", and then returns an "A".
 
-In a more typical language, you would expect to see something like "(A, B) → A" ("A" and "B" to "A") instead of "A → B → A" ("A" to "B" to "A").
+At this point however, you are probably wondering why function types are written so strangely with multiple "→"s.
+
+In a more typical language, you would expect to see something like "(A, B) → A", i.e. "A and B to A", instead of "A → B → A", i.e. "A to B to A".
 
 However, these two forms are effectively equivalent, and using the latter in place of the former is often referred to as "currying".
 
 Syntactically, "→" associates to the right, which is another way of saying that "A → B → A" is understood as "A → (B → A)" rather than "(A → B) → A".
 
-So, "A → B → A" aka "A → (B → A)" is a function which takes an "A", and returns another function which takes a "B" and returns an "A".
+So, an "A → B → A" (aka "A → (B → A)") is actually a function which takes an "A" and returns another function, which takes a "B" and returns an "A".
 
 Effectively, you have something that you can give an "A", and then give a "B", and get back an "A".
 
-This is no different than something which you can give an "A" and a "B" to get back an "A".
+This is in practice no different than something which you can give an "A" and a "B" to get back an "A".
 
 This can also be understood logically as the equivalence between "A implies (B implies A)" and "(A and B) implies A".
 
-So, from a logical perspective "const" can practically be interpreted as a proof of either of these two equivalent propositions.
+So, in practice, "const" can logically be interpreted as a proof of either of these two equivalent propositions.
 
-Currying is mainly done for syntactic convenience. By writing all of our functions as chains of single-argument functions, we eliminate redundancy.
+For this to work syntactically, its also important that "const x y" is understood as "(const x) y", and not "const (x y)".
 
-For example, if I have a "(A, B) → C" (named "f") and an "A" (named "x"), and I want a "B → C" (named "g"), I effectively need to do the following:
-  g y = f (x, y)
+In a more traditional language, this would be like writing "const(x)(y)", which is a bit ugly, and is the main reason that we don't use this syntax.
 
-On the other hand, if we wrote "(A, B) → C" as "A → (B → C)" from the start, all we need to do is apply f to x:
-  g = f x
+Currying is nice because it eliminates redundancy, and lets us have a single, universal function type, compatible with any number of arguments.
 
-Then we can just use "f x", and we don't need to define a separate function (but nothing stops us from still writing "g y = f x y" if we desire).
+For example, if we have "myThing : A", and "foo : (A, B, C, D) → E", then we could write the following definition:
 
-The fact that we can write "g = f x" and "g y = f x y" inerchangeably is sometimes referred to as η-equivalence ("eta-equivalence")
+  bar : (B, C, D) → E
+  bar (x, y, z) = foo (myThing, x, y, z)
 
-If this is your first time seeing something like this, please pause and take your time to process this, as currying can be very confusing at first.
+In Agda, where we curry our functions, we would have "foo : A → B → C → D → E", and we would define bar like:
+
+  bar : B → C → D → E
+  bar x y z = foo myThing x y z
+
+However, there is an advantage of the curried variant of bar, namely that its definition can be simplified to:
+
+  bar = foo myThing
+
+This can be justified by the fact that, for any two functions f and g, f = g if and only if f x = g x (this law is called "function extensionality").
+
+So, we simply apply this rule repeatedly for each individual curried argument:
+
+  bar x y z = foo myThing x y z
+  
+  bar x y = foo myThing x y
+  
+  bar x = foo myThing x
+  
+  bar = foo myThing
+
+Which is perhaps a bit clearer when we insert parentheses to emphasize the order in which curried functions are applied to arguments:
+
+  ((bar x) y) z = (((foo myThing) x) y) z
+  
+  (bar x) y = ((foo myThing) x) y
+  
+  bar x = (foo myThing) x
+  
+  bar = foo myThing
+  
+The equivalence of these forms is sometimes called η-equality ("eta-equality") and simplifying functions like this is called η-reduction.
+
+Currying and η-equality can be very confusing at first, so take your time to process this if it's your first time learning about them.
+
+Being a functional language, we use functions a *lot* in Agda, so these concepts are very handy, and are worth understanding and practicing.
+
+Try using this to fill in the following definition:
+
+-}
+
+const2 : {A : Set} → {B : Set} → A → B → A
+const2 x = const x
+
+{-
+
+Here, we have only introduced one of the two necessary parameters.
+
+Despite this, we can use our first definition of const along with η-equality to fill in the hole without introducing another parameter.
 
 Now, lets look at another way of defining const:
 
 -}
 
-const2 : {A : Set} {B : Set} → A → B → A
+const3 : {A : Set} {B : Set} → A → B → A
 
 {-
 
 Not much has changed yet, but noteworthy is some syntactic sugar:
 
-Instead of "{A : Set} → {B : Set} → ...", you can leave out the "→" between named parameters at the start of a function type.
+Instead of "{A : Set} → {B : Set} → ...", you can leave out the "→" between named parameters at the beginning of a type.
 
 Now get ready for some new syntax:
 
 -}
 
-const2 x = λ y → x
+const3 x = λ y → x
 
 {-
 
 So, what the hell is going on here? The expression to the right of the "=" is called a lambda, which is more or less an anonymous function definition.
 
-"λ" is the greek letter lambda, and can be typed as "\Gl" (and can be remembered as "Greek lowercase l"), or also simply as "\lambda".
+"λ" is the greek letter lambda, and can be typed as "\Gl" (and can be remembered as "Greek l"), or also simply as "\lambda".
 
 Those who want to avoid unicode can simply use a backslash in place of "λ", which is typed as "\\" if unicode typing is enabled in your editor.
 
@@ -241,28 +341,27 @@ The idea behind lambdas is the following:
 
   Well, lambda syntax proposes an answer to this question: If "f x = ...", then "f = λ x → ..."
 
-So, thanks to currying, the above definition of const2 is completely equivalent to the definition of const.
+So, thanks to currying, the above definition of const3 is completely equivalent to the definition of const.
 
 Let's explore just one more way of defining const:
 
 -}
 
-
-const3 : {A B : Set} → A → B → A
+const4 : {A B : Set} → A → B → A
 
 {-
 
 Once again, nothing too important here, but a bit more syntactic sugar which is worth remembering:
 
-Because A and B are both "Sets", we can write them within the same parenthases/braces, though in reality they are still separate parameters.
+Because A and B are both "Sets", we can write them within the same parentheses/braces, though in reality they are still separate parameters.
 
 -}
 
-const3 = λ x → λ y → x
+const4 = λ x → λ y → x
 
 {-
 
-This time, we have only introduced one of the two arguments. The value which you need to fill in is itself a function.
+This time, we have only introduced one of the two arguments, so the value which you need to fill in is itself a function.
 
 Now, here we could simply modify the lambda to take two arguments, or add one of the arguments before the "=".
 
@@ -272,7 +371,10 @@ Moving on, lets look at some functions that themselves take other functions as p
 
 -}
 
--- Note: you can put parenthases around the "A → C" to make this type (subjectively) more readable
+-- You can put parentheses around the "A → C" to make this type (subjectively) more readable
+-- The fact that we don't need these parenthases is an interesting effect of currying.
+-- This shows that returning a whole other function is no different than just introducing another parameter
+-- When you curry, you are already always just returning a function anyway
 compose : {A B C : Set} → (B → C) → (A → B) → A → C
 compose f g = λ x → f (g x)
 
@@ -285,15 +387,15 @@ As "→" associates to the right to allow for curried function types, function a
 This effectively means that "foo x y z" is understood as "((foo x) y) z". This is great, but it can catch you off guard.
 
 If you write "increment decrement x", for instance, Agda doesn't know that you meant "increment (decrement x)", and thinks that you:
-  A. wanted to increment "decrement" (which makes no sense)
+  1. wanted to increment "decrement" (which makes no sense)
   and
-  B. wanted to apply the result of incrementing "decrement" to x (which also makes no sense)
+  2. wanted to apply the result of incrementing "decrement" to x (which also makes no sense)
 
-Consequently you will get a possibly nasty type error, instead of being informed that you need parenthases. Try this out in compose.
+Consequently you will get a possibly nasty type error, instead of being informed that you need parentheses. Try this out in compose.
 
-Another thing you can try out here is the interactive Agda command C-c C-r, called "refine". This command can do a few different things.
+Another thing you can try out here is the interactive Agda command C-c C-r, called "refine", which can do a few different things.
 
-If the type of a goal (inside of a hole) is a function type, i.e. "A → B", pressing C-c C-r in an empty hole introduces a parameter via a lambda.
+If the type of a goal (inside of a hole) is a function type, like "A → B", pressing C-c C-r in an empty hole introduces a parameter via a lambda.
 
 Alternatively if the type of a goal is "A", and you have a function which returns an "A", you can type that function into the hole and press C-c C-r.
 
@@ -309,47 +411,211 @@ Be sure to practice using all of these to write definitions piece by piece while
 Let's also note once again the logical proposition that we have proven by defining compose:
   forall A B and C, if B implies C, and A implies B, then A implies C
 
-We will now move on to the last topic of this chapter:
+We will now move on to the last concept that will be introduced in this chapter:
 
 -}
 
--- impossible1 : {A : Set} → A
--- impossible1 = ?
+-- absurdity : {A : Set} → A
+-- absurdity = ?
 
--- impossible2 : {A B : Set} → A → B
--- impossible2 = ?
+-- absurdity2 : {A B : Set} → A → B
+-- absurdity2 = ?
 
 {-
 
 The above commented out definitions are absurdities. They are impossible to define and, logically interpreted, are false propositions.
 
-They are commented out to indicate that you, the reader, are not require to fill in their definitions to complete the exercise.
+They have polymorphic types which are empty Sets, and completing their definitions would amount to constructing an element of an empty Set.
 
-Feel free however, to comment them back in and try experimenting to understand why it is unprovable.
+This does not mean that "A" or "A → B" is an empty Set for any A or B, but rather that the Set of all such polymorphic functions is empty.
 
-Given an absurdity, you can prove literally anything. This also means that you can prove that one absurdity implies another:
+Note:
+  The idea that a *polymorphic* function type could itself also be a Set in some sense may initially sound strange or even paradoxical.
+  In fact, by default in Agda, polymorphic functions like "{A : Set} → A" do not have the type Set (aka "Set₀"), but rather something called "Set₁".
+  This means that you cant instanciate a Set₀-polymorphic function (e.g. any definition in this exercise) with another type which mentions Set₀.
+  Don't worry too much about this detail for now, as it only really exists to prevent undesirable and paradoxical behavior in Agda.
+  Why this is necessary, as well as the workaround for this will be discussed in a later chapter, but for now it's good to just be aware of it.
+
+"absurdity" claims that for any Set, there exists an element in that Set. Logically, this is a claim that every proposition is true.
+
+"absurdity2" claims that for any two Sets, there exists a function between those Sets, or, logically, that any two propositions imply each other.
+
+These definitions are commented out to indicate that you, the reader, are not require to fill in their definitions to complete the exercise.
+
+Feel free however, to comment them back in and try experimenting to understand why they are undefinable/unprovable.
+
+Given an absurdity, you can prove or construct literally anything, even another absurdity.
+
+This is anologous to the fact that, for any Set, there is exactly one function from the empty Set to that Set.
+
+Functions simply map each element in the input set to an element in the output set.
+
+So, if the input Set is empty, then you don't need to pick any elements from the output set, and you get a function for free.
+
+This also means that you can prove that one absurdity implies another:
 
 -}
 
-impossible1→impossible2 : ({A : Set} → A) → {A B : Set} → A → B
-impossible1→impossible2 imp1 {A} {B} a = imp1 {B}
-
+-- Notice how the type of this is literally "(type of absurdity) → (type of absurdity2)"
+absurdity→absurdity2 : ({A : Set} → A) → {A B : Set} → A → B
+absurdity→absurdity2 absurdity {A} {B} a = absurdity {B}
 
 {-
 
-Note the introduction of implicit arguments ({A} and {B}) in this definition, which brings them into scope and allows us to refer to them.
+This definition may be pretty confusing, as its first parameter is *itself* a polymorphic function, and there are even type parameters after this.
 
-Remember, naming variables in the type is not enough to introduce them so that you can use them in the function's definition
+Interestingly, with the mindset of currying, returning another polymorphic function just means introducing more generic parameters.
 
-In this example we don't need to do this, as Agda's inference engine is entirely capable of handling a simple case like this.
+These are an example of higher-rank polymorphism which is very rare to see in a more typical programming language.
 
-However, it allows us to explicitly apply implicit arguments to make the definition more readable.
+This means that you can use this polymorphic function with whatever type, *in the definition* of absurdity→absurdity2.
 
-This means that we can explicitly apply imp1 to a Set like A or B by writing "imp1 {MySet}"
+Likewise, if someone were to call absurdity→absurdity2, they would *have* to supply a polymorphic function.
 
-Additionally, on the topic of readability, feel free to replace introduced variables with an "_" if you don't use them in the definition.
+After this normal parameter, we then introduce two type parameters, and one of them even re-uses the name "A".
 
-And finally, I want to use this example to point out that we can use any characters other than () and {} in a name, such as the "→" here.
+This is fine, as the first "A" goes out of scope by the time that we bring the second "A" into scope, though it's a bit confusing.
+
+In the definition, we introduce these implicit type arguments ({A} and {B}) which brings them into scope and allows us to refer to them.
+
+Strictly speaking we don't need them here thanks to Agdas powerful type inference, but explicitly applying type arguments can be more readable.
+
+Finally, I want to use this example to point out that we can use any characters other than () and {} in a name, such as the "→" here.
+
+Before we move on to some exercises, lets take a peek at the module system in Agda:
+
+-}
+
+module Foo where
+
+  return-first : {A : Set} → A → A → A
+  return-first x y = x
+
+  return-second : {A : Set} → A → A → A
+  return-second x y = y
+
+{-
+
+Here we have a module containing two polymorphic functions which presumably each return one of their two parameters.
+
+These can be refereneced in the global namespace as "Foo.return-first" and "Foo.return-second", or brought into scope with "open Foo".
+
+We will go further into detail on the usage of modules as necessary, but for now, theres actually a really cool feature we are interested in:
+
+-}
+
+module Bar {A : Set} where
+
+  return-first : A → A → A
+  return-first x y = x
+
+  return-second : A → A → A
+  return-second x y = y
+
+{-
+
+Specifically, modules allow us to factor out parameters which are shared by a collection of definitions.
+
+Now, if we "open Bar" or use Bar.whatever to access something from Bar, this parameter will simply be propagated to the accessed definition.
+
+If we want to use these functions with a particular type, say "Int", we can even "open Bar {Int}" or define a new "module BarInt = Bar {Int}".
+
+But not only can we factor out implicit type parameters, we can even factor out any number of regular, explicit parameters:
+
+-}
+
+module Baz {A : Set} (x : A) (y : A) where
+
+  return-first : A
+  return-first = x
+
+  return-second : A
+  return-second = y
+
+{-
+
+This differs a lot from normal parameter syntax for functions, as the variable names and types are interspersed, rather than strictly independent.
+
+Notably, every module parameter is brought into scope throughout the entire body of the module, all at once.
+
+Arguably, this actually has a bit more resemblance to the way that functions take parameters in most mainstream programming languages.
+
+Of course, we can now also do "open Baz {Int} 3 7", along with plenty of cool tricks which will be discussed when we need them.
+
+This, however, is not why we are so interested in them right now.
+
+Rather, the ability to abstract over a set of parameters effectively lets us make assumptions, and experiment with what can be done with them.
+
+In a tutorial like this, which tries to have fun and interesting exercises, this is useful for posing interesting challenges:
+
+-}
+
+module LogicPuzzles {A B C D : Set} (f : A → D → B) (g : C → B → A) (h : A → C → D) where
+
+  puzzle1 : A → C → B
+  puzzle1 a c = f a (h a c)
+
+  puzzle2 : (B → C) → B → A
+  puzzle2 b-to-c b = g (b-to-c b) b
+
+  puzzle3 : (A → B → C) → A → D → C
+  puzzle3 a-to-b-to-c a d = a-to-b-to-c a (f a d)
+
+{-
+
+This is significant, since it also lets us postulate that some things exist, even when we may not necessarily know how to define them ourselves.
+
+For example, we can assume that some numerical type like "Int" or "Float" exists:
+
+-}
+
+-- In Agda, proper indentation allows us to write nearly anything over any number lines.
+-- So, we can write parameters over multiple lines to maximize readability
+module Numerics {Number : Set} 
+                (minus : Number → Number → Number)
+                (zero : Number)
+                where
+
+  negate : Number → Number
+  negate x = minus zero x
+
+  plus : Number → Number → Number
+  plus x y = minus x (negate y)
+
+  double : Number → Number
+  double x = plus x x
+
+{-
+
+Additionally, we can write _ as a module name to just abuse this parameter feature without wrapping our definitions up in a module.
+
+This is nice when we are just trying to cut out some duplication or experimenting and don't care to think up a module name.
+
+And finally, one nice example of something we can assume is the existence of an empty Set:
+
+-}
+
+module _
+  {EmptySet : Set}
+  -- We say that something is false or absurd if assuming it lets us prove/construct anything.
+  -- Implication is merely a requirement that *if* one thing is true, *then* another thing is true.
+  -- If the first thing is not true, then the second thing is irrelevant, and the implication holds trivially.
+  (EmptySet-is-absurd : {A : Set} → EmptySet → A)
+  -- The "A" in this polymorphic function does not stay in scope after this.
+  where
+
+  absurdity-to-EmptySet : ({A : Set} → A) → EmptySet
+  absurdity-to-EmptySet absurd = absurd {EmptySet}
+  
+  EmptySet-to-absurdity : EmptySet → {A : Set} → A
+  EmptySet-to-absurdity emptySet {A} = EmptySet-is-absurd {A} emptySet
+
+  -- If A implies false, then A implies anything
+  explosion : {A B : Set} → (A → EmptySet) → A → B
+  explosion {A} {B} f x = EmptySet-is-absurd {B} (f x)
+
+
+{-
 
 If you have made it this far, Congratulations! You have finished the tutorial section of this chapter.
 
@@ -371,7 +637,7 @@ C-c C-.     Show context and Goal type of current hole
 C-c C-f     Move to next hole after cursor
 C-c C-b     Move to previous hole from the cursor
 C-c C-s     Infer type (or more generally, "solve constraint")
-C-c C-r     Refine (automatically itroduce lambda, automatically apply given function to new holes, or otherwise do the same as C-c C-space)
+C-c C-r     Refine (automatically itroduce lambda or automatically apply given function to new holes)
 
 -}
 
@@ -385,8 +651,8 @@ s-combinator f g x = f x (g x)
 flip : {A B C : Set} → (A → B → C) → B → A → C
 flip f x y = f y x
 
-flip2 : {A B C D : Set} → (A → B → C → D) → A → C → B → D
-flip2 f x y z = f x z y
+flip' : {A B C D : Set} → (A → B → C → D) → A → C → B → D
+flip' f x y z = f x z y
 
 lift : {A B C D : Set} → (B → C → D) → (A → B) → (A → C) → A → D
 lift op f g = λ x → op (f x) (g x)
@@ -394,8 +660,8 @@ lift op f g = λ x → op (f x) (g x)
 on : {A B C : Set} → (B → B → C) → (A → B) → A → A → C
 on op f x y = op (f x) (f y)
 
-compose2 : {A B C D : Set} → (C → D) → (A → B → C) → A → B → D
-compose2 f g = λ x y → f (g x y)
+compose' : {A B C D : Set} → (C → D) → (A → B → C) → A → B → D
+compose' f g = λ x y → f (g x y)
 
 owl : {A B : Set} → ((A → B) → A) → (A → B) → B
 owl f g = g (f g)
@@ -407,13 +673,13 @@ warbler-cont : {A B C : Set} → (((A → A → B) → A → B) → C) → C
 warbler-cont f = f λ g x → g x x
 
 id-id : {A : Set} → A → A
-id-id = id id
-
-const-id : {A B : Set} → B → A → A
-const-id = const id
+id-id {A} = id {A → A} (id {A})
 
 compose-id-id :  {A : Set} → A → A
-compose-id-id = compose id id
+compose-id-id {A} = compose {A} {A} {A} (id {A}) (id {A})
+
+const-id : {A B : Set} → B → A → A
+const-id {A} {B} = const {A → A} {B} (id {A})
 
 
 {-
@@ -424,7 +690,7 @@ If you need inspiration, every chapter will give a few open-ended exercises to g
 
 open-ended exercises:
 
-Enter in an incorrect solution, i.e. "const x y = y" and look at what kinds of errors you get.
+Enter in an incorrect solution, e.g. "const x y = y" and look at what kinds of errors you get.
 
 Move an implicit parameter (like {B : Set}) to different positions within a function type. When does this work? When does this not work?
 
@@ -433,6 +699,10 @@ Introduce too many variables in a lambda or function definition. Wrongly introdu
 Define a function in terms of itself. What happens? Why might this be?
 
 Make up some logical propositions and see if you can or can't prove them. If you can't prove them, can you show that they imply an absurdity?
+
+Try to use η-reduction on a few more complicated definitions, and use functions like "id", "const", "compose", "flip", and "lift" to help.
+
+Can you completely η-reduce all the arguments away using only other higher-order functions? This is called "point-free" style.
 
 -}
 
@@ -460,8 +730,8 @@ Have fun!
 -- Don't worry if Agda is highlighting parts of the definition here
 -- It simply means that Agda hasn't been able to infer the implicit parameters given the (empty) type signature
 -- The solution here should use all 5 type variables
-compose2-[const-apply]-flip : {A B C D E : Set} → (A → B → C) → B → (D → E) → D → E
-compose2-[const-apply]-flip = compose2 (const apply) flip
+compose'-[const-apply]-flip : {A B C D E : Set} → (A → B → C) → B → (D → E) → D → E
+compose'-[const-apply]-flip = compose' (const apply) flip
 
 
 -- "((P → Q) → P) → P" is true. Strangely we can't prove it in Agda, but we *can* show that it implying an absurdity implies an absurdity
@@ -472,7 +742,7 @@ compose2-[const-apply]-flip = compose2 (const apply) flip
 
 -- Define a function which applies another function to itself
 apply-to-self : {A : Set} → ({A' : Set} → A' → A') → A → A
-apply-to-self f = f f
+apply-to-self = λ f → f f
 
 
 -- For simple polymorphic functions, like most of what we have defined in this exercise, lambdas (i.e. introducing arguments) are actually overkill

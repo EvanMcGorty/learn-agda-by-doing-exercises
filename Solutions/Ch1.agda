@@ -37,7 +37,7 @@ Now get ready for a definition:
 data Bool : Set where
   false : Bool
   true : Bool
--- In Agda we use whitespace instead of tabs, and we indent in increments of two spaces
+-- In Agda we use whitespace instead of tabs, and we generally indent in increments of two spaces
 -- Your editor should be smart enough to handle this automatically when you press tab
 
 {-
@@ -76,41 +76,43 @@ Reference the previous chapter as necessary, and try to make use of interactive 
 idBool0 : Bool → Bool
 idBool0 x = x
 
--- Equal to "id", but specialized to a type
+-- Defined in terms of idBool0
 idBool1 : Bool → Bool
-idBool1 = id {Bool}
+idBool1 x = idBool0 x
 
--- Equal to "id2", but specialized to a type
+-- Simply equal to idBool0 (thanks to eta-equivalence)
 idBool2 : Bool → Bool
-idBool2 = id2 Bool
+idBool2 = idBool0
 
--- Introduce the argument, and use "id"
+-- Defined in terms of id, with an explicit type parameter
 idBool3 : Bool → Bool
 idBool3 x = id {Bool} x
 
--- Like the previous definition, but taking advantage of type inference
+-- Simply equal to id, with an explicit type parameter
+idBool5 : Bool → Bool
+idBool5 = id {Bool}
+
+-- Defined in terms of id, but taking advantage of type inference
 idBool4 : Bool → Bool
 idBool4 x = id x
 
--- Like the previous definition, but without introducing the parameter (thanks to eta-equivalence)
-idBool5 : Bool → Bool
-idBool5 = id
-
--- Like the previous definition, but with id2
+-- Simply equal to id, but taking advantage of type inference
 idBool6 : Bool → Bool
-idBool6 = id2 _
+idBool6 = id
 
 {-
 
 It is worth noting that these identity functions aren't really meaningful propositions/proofs, as Bool itself isn't a meaningful proposition.
 
-Bool is just a data type. It is trivial to construct a Bool, which is what it would mean to "proove Bool".
+Bool is just a data type, or a Set with two elements. It is trivial to construct a Bool, which is what it would mean to "proove Bool".
 
-So, if anything, Bool is a trivially true proposition. But it is really just a datatype.
+So, if anything, since it is a nonempty Set, Bool is a trivially true proposition. But it is really just a datatype.
 
-Furthuremore, "true" and "false" are just arbitrary names, and have nothing to do with propositional truth or falsity in Agda.
+When we eventually formalize our notion of logical propositions in Agda, we will see that they at least share many similarities with Bool.
 
-Moving on, lets define some real operations on booleans:
+For now though, "true" and "false" are just arbitrary names, and don't immediately have anything to do with propositional truth or falsity in Agda.
+
+Moving on, lets define some more interesting operations on booleans:
 
 -}
 
@@ -467,13 +469,14 @@ testCongruenceWith : {A : Set} → A → A → (A → A) → Relation A → Bool
 testCongruenceWith x y f p = p x y => p (f x) (f y) 
 
 -- We can decently represent a typical "Set<A>" data type as a predicate on A
--- This is like defining Set<A> purely in terms of the behavior of its .contains function
--- However if we already think of "A" itself as a Set, then we should rather think of "Set<A>" as more like the Set of all *subsets* of A.
+-- This is like defining "Set<A>" purely in terms of the behavior of its ".contains" function
+-- However we have already been referring to Types as Sets, so it may be unwise to simply refer to "Set<A>" as "a set of A".
+-- Rather, a "Set<A>" is technically more like a *subset* of "A", so we should rather think of "Set<A>" as the Set of all subsets of A.
 SubsetOf : Set → Set
 SubsetOf A = Predicate A
 
-contains : {A : Set} → SubsetOf A → A → Bool
-contains a x = a x
+_∈_ : {A : Set} → A → SubsetOf A → Bool
+x ∈ a = a x
 
 -- The empty set
 ∅ : {A : Set} → SubsetOf A

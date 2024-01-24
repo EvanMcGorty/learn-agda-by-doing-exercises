@@ -12,19 +12,19 @@ Exercises primarily build comfort with Agda syntax and interactive editing, whil
 
 - Basic OPTIONS and top-level modules
 - Unicode support and interactive editing
-- Polymorphic functions
-- Normal vs implicit/inferred parameters
-- Currying
+- Functions and type parameters
+- Currying and eta-equality
 - Lambdas
 - Higher order functions
-- Absurdities
+- Absurdities and Higher-Rank Polymorphism
+- Module parameters
 
 ### Ch1 - Booleans
 
 - "import", "open", and "open import"
 - The definition of Bool
 - Pattern matching with Bool
-- "Mixfix" operators, precedence, and confusing errors
+- "Mixfix" operators, precedence
 - Evaluating/normalizing expressions
 - Type aliases, functions into Set, and compile-time computation
 - Variants of interactive Agda commands (i.e. "C-c", "C-y", and "C-u")
@@ -49,10 +49,12 @@ Exercises primarily build comfort with Agda syntax and interactive editing, whil
 - Bijections, aka Isomorphisms (between Sets)
 - Pattern matching lambdas
 - The term "product"
-- Exponent Types?
+- Exponent Types
 - Church-encoded products
 
 ## (WIP Table of not-yet-completed Contents)
+
+This section is just for me, so I can develop an overall plan and save ideas for later.
 
 ### Ch4 - Sigma Types
 
@@ -63,8 +65,6 @@ Exercises primarily build comfort with Agda syntax and interactive editing, whil
 - Basic dependent pattern matching
 - A generic dependent pair type and its logical meaning
 - The term "sigma"
-
-This section is just for me, so I can develop an overall plan and save ideas for later.
 
 ## Part 2 - Functional Programming
 
