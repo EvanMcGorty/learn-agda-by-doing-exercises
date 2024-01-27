@@ -54,7 +54,9 @@ To type something in unicode, you press "\", and then type in the name correspon
 
 For example, "→", the function arrow, is typed as "\to" or "\->", and has an ascii synonym "->"
 
-If you wish to know how to type something in unicode, highlight it and type C-x C-= (CTRL x and then CTRL =)
+If you wish to know how to type something in unicode, highlight it and type C-x C-= (CTRL x and then CTRL =).
+
+Be warned that such commands may prevent Ctrl-x from functioning as "cut", and you may wish to disable/remap them.
 
 Now, get ready for a type!
 
@@ -67,7 +69,7 @@ id : {A : Set} → A → A
 
 This is the first part of the definition of "id", sometimes referred to as a "type signature", and it says the following:
 
-"id" takes an implicit/inferred argument which is a Set, aka a Type, and in this context we give it the name "A"
+"id" takes an implicit/inferred argument which is a Set, aka a type, and in this context we give it the name "A"
 
 This produces a function of type "A → A", i.e. a function which takes an A and returns an A.
 
@@ -196,7 +198,7 @@ All of this allows us to give every identifier a clear and unambiguous type, whi
 
 Types are very special in Agda, as, among other things, we can often interpret them as logical propositions.
 
-This actually can be done to at least *some* degree in the majority typed programming languages with polymorphism.
+This actually can be done to at least *some* degree in the majority of typed programming languages.
 
 The idea behind this is to conceptually collapse Sets down so that we only care about whether they are empty or inhabited (aka nonempty).
 
@@ -204,19 +206,25 @@ In our case, "Sets" are our types, and a type is inhabited when we can construct
 
 If the nonemptyness of a Set is equivalent to a meaningful proposition, then constructing element of that Set is a proof of said proposition.
 
-So when we "interpret" a Set/Type as a proposition, we simply understand it to be false if it is empty, and true if it is inhabited.
+So when we "interpret" a Set/type as a proposition, we simply understand it to be false if it is empty, and true if it is inhabited.
 
 A function from A to B can then be interpreted as a proof that "the proposition corresponding to A implies the proposition corresponding to B".
 
 We justify this by the fact that the Set of all functions from A to B is nonempty if and only if A being nonempty implies that B is nonempty.
 
-In this case, we can interpret "id" as a proposition that forall A, A implies A.
+It may be worth pausing and taking a look at the truth table for "implies".
+
+In this case, we can interpret the type of "id" as a proposition that forall A, A implies A, and its definition as a proof of this proposition.
 
 This can be very confusing at first and is not critical to completely understand, so don't worry if you don't quite get it yet.
 
-The idea of an empty Type, i.e. a Type which you cannot construct a value of, also may sound strange, and is foreign to most programming languages.
+The idea of an empty type, i.e. a type which you cannot construct a value of, also may sound strange, and is foreign to most programming languages.
 
 However we will soon see examples of "empty" types, and you will get used to all these ideas intuitively just by working through this tutorial.
+
+This propositions-as-types trick is pretty neat, and it allows us to define and prove propositions just by writing well typed Agda code.
+
+Its usefulness, however, will become much more apparent in later chapters, once we learn how to define propositions about the behavior of our code.
 
 Moving on, here is another definition for you to fill in:
 
@@ -412,7 +420,7 @@ Be sure to practice using all of these to write definitions piece by piece while
 Let's also note once again the logical proposition that we have proven by defining compose:
   forall A B and C, if B implies C, and A implies B, then A implies C
 
-We will now move on to the last concept that will be introduced in this chapter:
+We will now move on to the last and hardest concept that will be introduced in this chapter:
 
 -}
 
@@ -459,7 +467,7 @@ This also means that you can prove that one absurdity implies another:
 
 -- Notice how the type of this is literally "(type of absurdity) → (type of absurdity2)"
 absurdity→absurdity2 : ({A : Set} → A) → {A B : Set} → A → B
-absurdity→absurdity2 imp1 {A} {B} a = {!   !}
+absurdity→absurdity2 absurdity {A} {B} a = {!   !}
 
 {-
 
@@ -483,7 +491,7 @@ Strictly speaking we don't need them here thanks to Agdas powerful type inferenc
 
 Finally, I want to use this example to point out that we can use any characters other than () and {} in a name, such as the "→" here.
 
-Before we move on to some exercises, lets take a peek at the module system in Agda:
+Before we finish up this chapter, we need to take a quick peek at the module system in Agda:
 
 -}
 
@@ -577,6 +585,8 @@ module Numerics {Number : Set}
                 (zero : Number)
                 where
 
+  -- given only "zero" and "minus", can we also define the following operations?
+
   negate : Number → Number
   negate x = {!   !}
 
@@ -592,14 +602,14 @@ Additionally, we can write _ as a module name to just abuse this parameter featu
 
 This is nice when we are just trying to cut out some duplication or experimenting and don't care to think up a module name.
 
-And finally, one nice example of something we can assume is the existence of an empty Set:
+And finally, one nice example of something we can assume (for now) is the existence of an empty Set:
 
 -}
 
 module _
   {EmptySet : Set}
   -- We say that something is false or absurd if assuming it lets us prove/construct anything.
-  -- Implication is merely a requirement that *if* one thing is true, *then* another thing is true.
+  -- Justification: implication is merely a requirement that *if* one thing is true, *then* another thing is true.
   -- If the first thing is not true, then the second thing is irrelevant, and the implication holds trivially.
   (EmptySet-is-absurd : {A : Set} → EmptySet → A)
   -- The "A" in this polymorphic function does not stay in scope after this.
@@ -620,13 +630,17 @@ module _
 
 If you have made it this far, Congratulations! You have finished the tutorial section of this chapter.
 
-The rest of this file consists mostly of explanation-free exercises to work through, practicing and building off of what was taught above.
+As in all chapters, the rest of this file consists of mostly explanation-free exercises which practice and build off of what was taught above.
 
-The content in this section is somewhat optional, so you can skip exercises if you are confident in your ability to complete them.
+These exercises will be harder and may have you learn things which are interesting and useful, but will never be crucial to understand.
+
+If any important ideas are introduced in these exercises, then they will always be covered thoroughly in the tutorial section of a later chapter.
 
 Nonetheless, these exercises are very valuable practice, and skipping too many of them may cause you to have difficulty with later chapters.
 
-If you manage to complete all of them, which I recommend trying to do, then you have officially completed the chapter.
+If you manage to complete all of them, which I recommend attempting if you have the time, then you have officially completed the chapter.
+
+Otherwise, you should feel more than welcome to come back to any missed exercises after prograssing further into this series.
 
 Make sure to practice all of the interactive commands discussed so far:
 
@@ -641,6 +655,9 @@ C-c C-s     Infer type (or more generally, "solve constraint")
 C-c C-r     Refine (automatically itroduce lambda or automatically apply given function to new holes)
 
 -}
+
+
+-- practice exercises:
 
 
 apply : {A B : Set} → (A → B) → A → B
@@ -676,11 +693,31 @@ warbler-cont f = {!   !}
 id-id : {A : Set} → {!   !} → {!   !}
 id-id {A} = id {{!   !}} (id {{!   !}})
 
-compose-id-id :  {A : Set} → {!   !} → {!   !}
+compose-id-id : {A : Set} → {!   !} → {!   !}
 compose-id-id {A} = compose {{!   !}} {{!   !}} {{!   !}} (id {{!   !}}) (id {{!   !}})
 
 const-id : {A B : Set} → B → A → A
 const-id {A} {B} = const {{!   !}} {{!   !}} (id {{!   !}})
+
+
+module _
+  {Falsity : Set} -- aka EmptySet
+  (impossible : {A : Set} → Falsity → A) -- aka EmptySet-is-absurd
+  {A B C D : Set}
+  (p1 : A → B → Falsity)
+  (p2 : (A → C) → B → Falsity)
+  (p3 : (C → B → Falsity) → D → Falsity)
+  (p4 : (D → Falsity) → (B → Falsity) → Falsity)
+  where
+
+  
+  
+  -- Show that the above assumtions are impossible
+  -- If this is hard to do in one line, then write helper functions to prove useful propositions
+  -- (A mathematician might call these "lemmas")
+  falsity : Falsity
+  falsity = {!   !}
+
 
 
 {-
@@ -693,17 +730,33 @@ open-ended exercises:
 
 Enter in an incorrect solution, e.g. "const x y = y" and look at what kinds of errors you get.
 
-Move an implicit parameter (like {B : Set}) to different positions within a function type. When does this work? When does this not work?
+Move an implicit parameter (like {B : Set}) to different positions within a function type.
+  When does this work?
+  When does this not work?
 
-Introduce too many variables in a lambda or function definition. Wrongly introduce an implicit variable. What happens? Why?
+Try introducing too many variables in a lambda or function definition, or wrongly introducing an implicit variable.
+  What happens?
+  Why?
 
-Define a function in terms of itself. What happens? Why might this be?
-
-Make up some logical propositions and see if you can or can't prove them. If you can't prove them, can you show that they imply an absurdity?
+Define a function in terms of itself.
+  What happens?
+  Why might this be?
 
 Try to use η-reduction on a few more complicated definitions, and use functions like "id", "const", "compose", "flip", and "lift" to help.
 
 Can you completely η-reduce all the arguments away using only other higher-order functions? This is called "point-free" style.
+
+Make up some logical propositions and see if you can or can't prove them.
+  If you can't prove them, can you show that they imply an absurdity?
+
+Try to define a proposition which seemingly can neither be proven nor disproven with what you have learned so far.
+  Hint: Agda is a "constructive" proof assistant by default, so try googling "non-constructive logic".
+  What prevents you from proving or disproving this theorem?
+  In what ways is this desirable or undesirable for a language like Agda?
+
+You may notice that we currently can't derive "absurdity" from "absurdity2".
+  Is this for a good reason?
+  What is missing from this chapter which would allow you to do this?
 
 -}
 
@@ -725,7 +778,7 @@ Have fun!
 
 -}
 
--- challenges:
+-- challenge exercises:
 
 
 -- Don't worry if Agda is highlighting parts of the definition here
@@ -823,4 +876,4 @@ c = {!   !}
 -- However, the type signature of s is to weak to infer a different type for {...} when f is applied to it than when g is applied to it.
 -- It requires that {...} can be instanciated as a *single* type, which both f and g can accept an argument of.
 -- So, it is absolutely possible for "f {...} (g {...})" to typecheck, but for "s f g {...}" not to typecheck
--- Later, you will learn how to give functions more expressive types that are less prone things like this.
+-- Later, you will learn how to give functions more expressive types that are less prone things like this. 

@@ -2,13 +2,11 @@
 
 module Imports.Ch2 where
 
--- The names and types from Ch0 differ from those in the Agda stdlib.
--- Soon we will redefine these functions to match the stdlib.
 -- import Function
 open import Solutions.Ch0 using (id; const; compose; apply; flip; on; lift) public
 
 -- import Data.Bool
-open import Solutions.Ch1 using (Bool; false; true; not; _∧_; _∨_; _xor_; _&&_; _||_; if_then_else_) public
+open import Solutions.Ch1 using (Bool; false; true; not; _∧_; _∨_; _xor_; _&&_; _||_; if_then_else_; _<=>_) public
 
 {-
 
@@ -20,6 +18,6 @@ The rest must be opened separately or accessed through the module, i.e. "Solutio
 
 Furthermore, "public" causes these symbols to be re-exported as part of this module.
 
-From now on, above each import you will see a comment containing the Agda stdlib module with the same contents.
+From now on, above each import you will see a comment containing the Agda stdlib module with more or less the same contents.
 
 -}

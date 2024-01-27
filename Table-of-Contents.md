@@ -56,7 +56,7 @@ Exercises primarily build comfort with Agda syntax and interactive editing, whil
 
 This section is just for me, so I can develop an overall plan and save ideas for later.
 
-### Ch4 - Sigma Types
+### Ch4 - Universes
 
 - Universe Levels and Universe Polymorphism
 - Explicit polymorphic parameters
@@ -71,13 +71,10 @@ This section is just for me, so I can develop an overall plan and save ideas for
 With a firm grasp over most of Agda's basic features, we dive into functional programming in Agda.
 This part should leave the reader with a firm understanding of all the most central themes that might be found in a typical haskell tutorial.
 
-### Maybe
+### Maybe & List
 
 - Lazy evaluation in Agda
-
-### List
-
-- Correct-by-construction code
+- Correct-by-construction code (e.g. with NonemptyList)
 
 ### Typeclasses
 

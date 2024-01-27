@@ -6,9 +6,13 @@ module Exercises.Ch2 where
 
 This chapter will define the natural numbers as a data type and explore how we can use them to perform recursion.
 
-We will start off again by importing everything we have defined in previous chapters, but we need to start being a bit more orderly.
+We will start off again by importing some of what we have defined in previous chapters, but we need to start being a bit more orderly.
 
 So, imports for all future chapters will be managed in a separate folder, "Imports", which you should feel welcome to inspect.
+
+To avoid cluttering the global namespace, we will prefer to only import more important functions, like ones that you might find in the stdlib.
+
+If you ever want to import something else though, you shouldn't hesitate to do so.
 
 -}
 
@@ -29,6 +33,9 @@ data ℕ : Set where
 -- ℕ can be typed as \bN
 -- However here is an ascii synonym, as promised:
 Nat = ℕ
+
+-- In ADT syntax, this definition is equivalent to:
+-- data Nat = Zero | Suc Nat
 
 {-
 
@@ -162,6 +169,8 @@ You can use this variable just like any other argument, and you can even case sp
 
 For readability, it can be worth renaming this variable from whatever name Agda automatically gives it, perhaps to something like n' or pred-n.
 
+Don't forget though, to reload after modifying anything by hand, so that interactive commands are aware of any changes you have made.
+
 Try using this knowledge to define the following functions:
 
 -}
@@ -179,7 +188,7 @@ isThreeOrFour n = {!   !}
 
 As you can see, these cases can become nested, and to any arbitrary depth, and are called "patterns", hence "pattern matching"
 
-You can of course also write these patterns yourself, as long as you are careful about the parenthases.
+You can of course also write these patterns yourself, as long as you are careful about the parentheses.
 
 You can also write overlapping cases, i.e. with a default case at the end like:
   foo (...) = ...
@@ -222,7 +231,8 @@ This function clearly never terminates, so it's nice that the termination checke
 
 Note:
   In fact, one way for us to see that it must not terminate, is the fact that the definition would type check with any return type.
-  So, if this was a valid total function definition, we could use it to construct an element of any type, which is an impossible task.
+  It claims to construct a Bool (or whatever type you replace Bool with), without ever actually doing so.
+  So, if this were a valid total function definition, we could use it to "construct" an element of any type, which is absurd.
 
 However, sometimes the termination checker will complain about a completely valid function definition:
 
@@ -262,7 +272,7 @@ good (suc n) = good n
 
 Here, we use pattern matching to not only (arguably) make the definition more readable, but also make it clear that it terminates.
 
-By the nature of data type definitions in Agda, a pattern like (suc x) will always be "structrually larger" x.
+By the nature of data type definitions in Agda, a pattern like (suc x) will always be "structrually larger" than x.
 
 Every constructor in Agda produces a value that, naturally, is structurally larger than all of its inputs.
 
@@ -467,7 +477,7 @@ When we reason about the correctness of recursive functions, we are actually usi
 
 The principle of induction in mathematics states that:
 
-  Given predicate a P over the natural numbers,
+  Given a predicate P over the natural numbers,
 
   if P(0) holds, (this is often called the base case)
 
@@ -535,9 +545,13 @@ foo zero = ...
 foo (suc zero) = ...
 foo (suc (suc n)) = ... foo n ...
 
-We will explore this idea more deeply in coming chapters, both informally and even formally, but until then, here are some more exercises:
+We will explore this idea more deeply in coming chapters.
 
 -}
+
+
+-- practice exercises:
+
 
 infixr 8 _^_
 infix  8 _!
@@ -664,7 +678,7 @@ Define a data type with no "base case", and only a "recursive case".
 
 
 
--- challenges:
+-- challenge exercises:
      
 
 -- Infinite binary sequences (of the form "Stream Bool") are known to be unenumerable.

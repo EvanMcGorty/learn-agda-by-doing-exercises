@@ -2,8 +2,6 @@
 
 {-
 
-Welcome to the next chapter.
-
 This file will define an actual concrete data type, the booleans, and explore what kinds of functions we can write with them.
 
 We will also learn how to define aliases for types and write some basic type level functions.
@@ -40,17 +38,20 @@ data Bool : Set where
 -- In Agda we use whitespace instead of tabs, and we generally indent in increments of two spaces
 -- Your editor should be smart enough to handle this automatically when you press tab
 
+-- If you know ADT syntax like in Haskell or ML, this definition is equivalent to:
+-- data Bool = False | True
+
 {-
 
 This definition declares a data type, "Bool", which is a Set (i.e. a type).
 
-Furthurmore it declares that there is a Bool named "false", and a Bool named "true".
+Furthurmore, it declares that there is a Bool named "false", and a Bool named "true".
 
 false and true are called constructors, as they are ways to construct a Bool.
 
 In Agda, no data types are automatically baked directly into the language, so we either have to define to define them by hand or use a library.
 
-So, this is kind of like manually writing the following definition in a more traditional programming langauge:
+So, this is kind of like manually writing the following definition in a more typical programming langauge:
 
   abstract class Bool
 
@@ -104,13 +105,13 @@ idBool6 = id
 
 It is worth noting that these identity functions aren't really meaningful propositions/proofs, as Bool itself isn't a meaningful proposition.
 
+Interpreting types as propositions is something which *we* may choose to do, but this notion of propositions is not baked into Agda.
+
+In this sense, types-as-propositions is an idea within our minds, whereas Bool is a concrete thing in Agda, regardless of their similarities.
+
 Bool is just a data type, or a Set with two elements. It is trivial to construct a Bool, which is what it would mean to "proove Bool".
 
-So, if anything, since it is a nonempty Set, Bool is a trivially true proposition. But it is really just a datatype.
-
-When we eventually formalize our notion of logical propositions in Agda, we will see that they at least share many similarities with Bool.
-
-For now though, "true" and "false" are just arbitrary names, and don't immediately have anything to do with propositional truth or falsity in Agda.
+So, if anything, since it is a nonempty Set, we could interpret Bool to be a trivially true proposition. But it's really just a datatype.
 
 Moving on, lets define some more interesting operations on booleans:
 
@@ -260,7 +261,7 @@ In Agda, types are actually just values and can consequently be used wherever yo
 
 This means that we can even define functions that return Sets, and use them in type signatures.
 
-The Symbol "Set" is not only used to quantify over generic type-parameters, but is actually itself just another Type, like "Bool".
+The Symbol "Set" is not only used to quantify over generic type-parameters, but is actually itself just another type, like "Bool".
 
 This means that we can write a function which returns a Set, and can use it in a type expression:
 
@@ -326,11 +327,17 @@ Alternatively, if something is ever getting simplified to a point that makes it 
 
 This works for the majority of commands that involve displaying types, not just C-c C-,
 
-Moving on, here are some exercises to practice the above content:
+It's also worth noting that there are a number of miscellaneous commands which start with C-x, such as C-x C-=, aka "lookup unicode input sequence".
+
+As mentioned previously, this is the reason that Ctrl-x may not function properly as "cut", so you may want to disable/remap them.
 
 -}
 
+
+-- practice exercises:
+
 -- note: you are naturally free to write your own defintions (i.e. helper functions)
+
 
 infixr 4 _=>_ _<=>_
 
@@ -458,7 +465,7 @@ testCongruenceWith x y f p = {!   !}
 
 -- We can decently represent a typical "Set<A>" data type as a predicate on A
 -- This is like defining "Set<A>" purely in terms of the behavior of its ".contains" function
--- However we have already been referring to Types as Sets, so it may be unwise to simply refer to "Set<A>" as "a set of A".
+-- However we have already been referring to types as Sets, so it may be unwise to simply refer to "Set<A>" as "a set of A".
 -- Rather, a "Set<A>" is technically more like a *subset* of "A", so we should rather think of "Set<A>" as the Set of all subsets of A.
 SubsetOf : Set → Set
 SubsetOf A = Predicate A
@@ -494,6 +501,15 @@ a ∖ b = {!   !}
 
 open-ended exercises:
 
+Prove some properties about your definitions, such as:
+  ∀ x, x ≡ not (not x)
+  ∀ x, x ≡ x ∧ x
+  ∀ x y, x ∨ y ≡ y ∨ x
+  ∀ x y, x ≡ x ∨ (x ∧ y)
+  ∀ x y, not (x ∨ y) ≡ not y ∧ not x
+  ∀ x y z, x ∨ (y ∨ z) ≡ (x ∨ y) ∨ z
+  ∀ x y z, x ∧ (y ∨ z) ≡ (x ∧ y) ∨ (x ∧ z)
+
 Define a type "Trool" with constructors "yes", "no" and "maybe".
   Define some operations for performing "trinary logic".
   What kinds of laws and properties do these operations have?
@@ -506,7 +522,7 @@ Define a type "QuadrantalAngle" with constructors "0-deg", "90-deg", "180-deg", 
 -}
 
 
--- challenges:
+-- challenge exercises:
 
 
 -- A Boolean function based encoding of a type with 2^32 distinct values

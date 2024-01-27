@@ -1,6 +1,6 @@
 {-# OPTIONS --safe --cubical-compatible #-}
 
-module Exercises.Ch3 where
+module Solutions.Ch3 where
 
 {-
 
@@ -58,16 +58,18 @@ Lets start out by constructing a few BoolAndNats:
 -}
 
 falseAndSix : BoolAndNat
-falseAndSix = {!   !}
+falseAndSix = makeBoolAndNat false 6
 
 trueAndEleven : BoolAndNat
-trueAndEleven = {!   !}
+trueAndEleven = makeBoolAndNat true 11
 
 boolWithBitValue : Bool → BoolAndNat
-boolWithBitValue x = {!   !}
+boolWithBitValue false = makeBoolAndNat false 0
+boolWithBitValue true = makeBoolAndNat true 1
 
 natWithPositivity : ℕ → BoolAndNat
-natWithPositivity n = {!   !}
+natWithPositivity zero = makeBoolAndNat false zero
+natWithPositivity (suc n) = makeBoolAndNat true (suc n)
 
 {-
 
@@ -80,10 +82,10 @@ Try it out, as per usual with C-c C-c:
 -}
 
 getBool : BoolAndNat → Bool
-getBool x = {!   !}
+getBool (makeBoolAndNat b n) = b
 
 getNat : BoolAndNat → ℕ
-getNat x = {!   !}
+getNat (makeBoolAndNat b n) = n
 
 {-
 
@@ -98,13 +100,13 @@ Try experimenting with the difference between using pattern matching and using t
 -}
 
 invertBool : BoolAndNat → BoolAndNat
-invertBool x = {!   !}
+invertBool (makeBoolAndNat b n) = makeBoolAndNat (not b) n
 
 incrementNat :  BoolAndNat → BoolAndNat
-incrementNat x = {!   !}
+incrementNat (makeBoolAndNat b n) = makeBoolAndNat b (suc n)
 
 swapWith : (ℕ → Bool) → (Bool → ℕ) → BoolAndNat → BoolAndNat
-swapWith f g x = {!   !}
+swapWith f g (makeBoolAndNat b n) = makeBoolAndNat (f n) (g b)
 
 {-
 
@@ -119,16 +121,16 @@ Of course you could type your desired function in and then press C-c C-r, but if
 -}
 
 makeBoolAndNatWith : {A : Set} → (A → Bool) → (A → ℕ) → A → BoolAndNat
-makeBoolAndNatWith f g x = {!   !}
+makeBoolAndNatWith f g x = makeBoolAndNat (f x) (g x)
 
 withBoolAndNat : {A : Set} → (BoolAndNat → A) → Bool → ℕ → A
-withBoolAndNat f x n = {!   !}
+withBoolAndNat f x n = f (makeBoolAndNat x n)
 
 updateNat : (ℕ → ℕ) → BoolAndNat → BoolAndNat
-updateNat f x = {!   !}
+updateNat f (makeBoolAndNat b n) = makeBoolAndNat b (f n)
 
 compare-BoolAndNat : BoolAndNat → BoolAndNat → Bool
-compare-BoolAndNat x y = {!   !}
+compare-BoolAndNat (makeBoolAndNat x n) (makeBoolAndNat y m) = (x <=> y) ∧ (n ≡ᵇ m)
 
 {-
 
@@ -141,13 +143,13 @@ This is fine when we only need one field, but if we need multiple then it can ca
 -}
 
 extractBool : {A : Set} → (A → BoolAndNat) → A → Bool
-extractBool f x = {!   !}
+extractBool f x = getBool (f x)
 
 mapBoolAndNat : {A : Set} → (A → BoolAndNat) → (Bool → Bool) → (ℕ → ℕ) → A → BoolAndNat
-mapBoolAndNat f g h x = {!   !}
+mapBoolAndNat f g h x = makeBoolAndNat (g (getBool (f x))) (h (getNat (f x)))
 
 composeWithBoolAndNat : {A B : Set} → (A → BoolAndNat) → (Bool → ℕ → B) → A → B
-composeWithBoolAndNat f g x = {!   !}
+composeWithBoolAndNat f g x = g (getBool (f x)) (getNat (f x))
 
 {-
 
@@ -203,13 +205,20 @@ Notes:
 -}
 
 composeBoolsAndNats : {A : Set} → (BoolAndNat → A) → (A → Bool) → (A → ℕ) → BoolAndNat → BoolAndNat
-composeBoolsAndNats f g h x = {!   !}
+composeBoolsAndNats f g h x =
+  let y = f x
+   in makeBoolAndNat (g y) (h y)
 
-doubleComposeBoolAndNat : {A B : Set} → (A → BoolAndNat) → (BoolAndNat → BoolAndNat → B) → A → A → B
-doubleComposeBoolAndNat f g x y = {!   !}
+doubleComposeBoolAndNat : {A B : Set} → (A → BoolAndNat) → (BoolAndNat → BoolAndNat → B) → A → B
+doubleComposeBoolAndNat f g x = g y y
+  where
+    y = f x
 
 compare-Bool-to-BoolAndNat : (Bool → BoolAndNat) → (Bool → BoolAndNat) → Bool
-compare-Bool-to-BoolAndNat f g = {!   !}
+compare-Bool-to-BoolAndNat f g = compare-on false ∧ compare-on true
+  where
+    compare-on : Bool → Bool
+    compare-on x = compare-BoolAndNat (f x) (g x)
 
 {-
 
@@ -234,7 +243,7 @@ This definition is arguably more readable than the equivalent definition as a da
 data ThreeBools : Set where
   makeThreeBools : Bool → Bool → Bool → ThreeBools
 
-And reads more like its equivalent in a more typical language:
+And reads more like its equivalent in a more mainstream language:
 
 class ThreeBools {
   Bool fst;
@@ -249,7 +258,7 @@ The only thing missing here is a constructor function, which is replaced with th
 -}
 
 false-false-false : ThreeBools
-false-false-false = record { fst = {!   !} ; snd = {!   !} ; thd = {!   !} }
+false-false-false = record { fst = false ; snd = false ; thd = false }
 
 {-
 
@@ -258,7 +267,7 @@ This may look annoying to type in, but as with BoolAndNat, we can just use C-c C
 -}
 
 true-true-true : ThreeBools
-true-true-true = {!   !}
+true-true-true = record { fst = true ; snd = true ; thd = true }
 
 {-
 
@@ -267,7 +276,8 @@ Additionally, pattern matching (automatically with C-c C-c) also uses this recor
 -}
 
 is-false-true-true : ThreeBools → Bool
-is-false-true-true x = {!   !}
+is-false-true-true record { fst = false ; snd = true ; thd = true } = true
+is-false-true-true record { fst = fst ; snd = snd ; thd = thd } = false
 
 {-
 
@@ -288,10 +298,11 @@ And allthough you can still write out record syntax, C-c C-c and C-c C-r will no
 -}
 
 zero-zero : TwoNats
-zero-zero = {!   !}
+zero-zero = makeTwoNats 0 0
 
 is-one-one : TwoNats → Bool
-is-one-one x = {!   !}
+is-one-one (makeTwoNats 1 1) = true
+is-one-one (makeTwoNats fst snd) = false
 
 
 {-
@@ -327,13 +338,13 @@ Remember to experiment with both in various scenarios and see when each one is b
 -}
 
 get-first-elements : ThreeBools → TwoNats → BoolAndNat
-get-first-elements x y = {!   !}
+get-first-elements x y = makeBoolAndNat (ThreeBools.fst x) (TwoNats.fst y)
 
 addTwoNats : TwoNats → ℕ
-addTwoNats x = {!   !}
+addTwoNats x = TwoNats.fst x + TwoNats.snd x
 
 invertThreeBools : ThreeBools → ThreeBools
-invertThreeBools x = {!   !}
+invertThreeBools x = record { fst = not (ThreeBools.fst x) ; snd = not (ThreeBools.snd x) ; thd = not (ThreeBools.thd x) }
 
 {-
 
@@ -353,13 +364,13 @@ record Pair (A : Set) (B : Set) : Set where
 open Pair
 
 seven-and-false : Pair ℕ Bool
-seven-and-false = {!   !}
+seven-and-false = mkPair 7 false
 
 swap : {A B : Set} → Pair A B → Pair B A
-swap x = {!   !}
+swap (mkPair x y) = mkPair y x
 
 reorderPairs : {A B C : Set} → Pair A (Pair B C) → Pair (Pair A B) C
-reorderPairs x = {!   !}
+reorderPairs (mkPair x (mkPair y z)) = mkPair (mkPair x y) z
 
 {-
 
@@ -412,30 +423,32 @@ And of course it doesn't stop there. We can define all sorts of type synonyms, j
 -}
 
 FlippedPair : Set → Set → Set
-FlippedPair A B = Pair {!   !} {!   !}
+FlippedPair A B = Pair B A
 
 PairOfNatAnd : Set → Set
-PairOfNatAnd A = Pair {!   !} {!   !}
+PairOfNatAnd A = Pair ℕ A
 
 TwoOf : Set → Set
-TwoOf A = Pair {!   !} {!   !}
+TwoOf A = Pair A A
 
-seven-and-false2 : PairOfNatAnd {!   !}
-seven-and-false2 = {!   !}
+seven-and-false2 : PairOfNatAnd Bool
+seven-and-false2 = seven-and-false
 
-swap2 : {A B : Set} → Pair {!   !} {!   !} → FlippedPair {!   !} {!   !}
-swap2 = {!   !}
+swap2 : {A B : Set} → Pair A B → FlippedPair A B
+swap2 = swap
 
 ApplyToNat : (Set → Set) → Set
 ApplyToNat F = F ℕ
 
 -- This one might be a bit tricky :^)
-runOnTwoOfNat : {A : Set} → (ℕ → ℕ → A) → ApplyToNat {!   !} → A
-runOnTwoOfNat = {!   !}
+runOnTwoOfNat : {A : Set} → (ℕ → ℕ → A) → ApplyToNat TwoOf → A
+runOnTwoOfNat = λ f x → f (fst x) (snd x)
 
 {-
 
 All of these functions are just as usable as you would hope them to be, because simply reduce during typechecking.
+
+Remember to use the C-y variant of commands (like C-y C-, and C-y C-.) to display the reduced forms of these types.
 
 Another really cool thing about Pair, is that it has a meaningful logical interpretation.
 
@@ -475,7 +488,7 @@ Specifically, the situation in which you have an instance of each of its type pa
 -}
 
 construct-pair : {A B : Set} → A → B → Pair A B
-construct-pair x y = {!   !}
+construct-pair x y = mkPair x y
 
 {-
 
@@ -486,10 +499,10 @@ Naturally, "A and B" implies A, and also implies B:
 -}
 
 prove-left : {A B : Set} → Pair A B → A
-prove-left x = {!   !}
+prove-left x = fst x
 
 prove-right : {A B : Set} → Pair A B → B
-prove-right x = {!   !}
+prove-right x = snd x
 
 {-
 
@@ -499,15 +512,15 @@ And we can actually prove more or less any property that you would expect to be 
 
 -- A implies A and A
 boring-Pair : {A : Set} → A → Pair A A
-boring-Pair x = {!   !}
+boring-Pair x = mkPair x x
 
 -- If A implies C, then A and B implies C and B
 map-left : {A B C : Set} → (A → C) → Pair A B → Pair C B
-map-left f x = {!   !}
+map-left f (mkPair x y) = mkPair (f x) y
 
 -- If B implies C, then A and B implies A and C
 map-right : {A B C : Set} → (B → C) → Pair A B → Pair A C
-map-right f x = {!   !}
+map-right f (mkPair x y) = mkPair x (f y)
 
 {-
 
@@ -516,10 +529,10 @@ And we can also finally show that curried functions are the same as the typical 
 -}
 
 curry : {A B C : Set} → (Pair A B → C) → A → B → C
-curry f x y = {!   !}
+curry f x y = f (mkPair x y)
 
 uncurry : {A B C : Set} → (A → B → C) → Pair A B → C
-uncurry f x = {!   !}
+uncurry f (mkPair x y) = f x y
 
 {-
 
@@ -574,22 +587,29 @@ For these exercises, focus on proving these laws informally but clearly in your 
 -}
 
 identity-Bool-Bijection : RawBijection Bool Bool
-identity-Bool-Bijection = {!   !}
+identity-Bool-Bijection = makeRawBijection id id
 
 inverse-Bool-Bijection : RawBijection Bool Bool
-inverse-Bool-Bijection = {!   !}
+inverse-Bool-Bijection = makeRawBijection not not
 
 FlippedPear-Bijection : {A B : Set} → RawBijection (Pair A B) (Pair B A)
-FlippedPear-Bijection = {!   !}
+FlippedPear-Bijection = makeRawBijection swap swap
 
 TwoOf-Bijection : {A : Set} → RawBijection (Pair A A) (Bool → A)
-TwoOf-Bijection = {!   !}
+TwoOf-Bijection {A} = makeRawBijection (λ { (mkPair x y) false → x
+                                          ; (mkPair x y) true → y })
+                                       (λ f → mkPair (f false) (f true))
 
 flip-Bijection : {A B : Set} → RawBijection A B → RawBijection B A
-flip-Bijection f = {!   !}
+flip-Bijection f = makeRawBijection (from f) (to f)
 
 compose-Bijection : {A B C : Set} → RawBijection A B → RawBijection B C → RawBijection A C
-compose-Bijection f g = {!   !}
+compose-Bijection {A} {B} {C} f g = makeRawBijection to' from'
+  where
+    to' : A → C
+    to' x = to g (to f x)
+    from' : C → A
+    from' x = from f (from g x)
 
 {-
 
@@ -671,22 +691,33 @@ First lets define a few operations (with pattern matching of course) on these ty
 -}
 
 Six-to-Nat : Six → ℕ
-Six-to-Nat x = {!   !}
+Six-to-Nat 1/Six = 1
+Six-to-Nat 2/Six = 2
+Six-to-Nat 3/Six = 3
+Six-to-Nat 4/Six = 4
+Six-to-Nat 5/Six = 5
+Six-to-Nat 6/Six = 6
 
 2/Three-and-4/Five : Pair Three Five
-2/Three-and-4/Five = {!   !}
+2/Three-and-4/Five = mkPair 2/Three 4/Five
 
 next-element-of-Four : Four → Four
-next-element-of-Four x = {!   !}
+next-element-of-Four 1/Four = 2/Four
+next-element-of-Four 2/Four = 3/Four
+next-element-of-Four 3/Four = 4/Four
+next-element-of-Four 4/Four = 1/Four
 
 One-to-Two : One → Two
-One-to-Two x = {!   !}
+One-to-Two 1/One = 1/Two
 
 Nat-to-One : ℕ → One
-Nat-to-One n = {!   !}
+Nat-to-One n = 1/One
 
 Bool-is-Two : RawBijection Bool Two
-Bool-is-Two = {!   !}
+Bool-is-Two = makeRawBijection (λ { false → 1/Two
+                                  ; true → 2/Two })
+                                λ { 1/Two → false
+                                  ; 2/Two → true }
 
 {-
 
@@ -701,21 +732,41 @@ We will use Bijections to count how many elements are in a type:
 -}
 
 -- Fill in the hole in this type signature with one of the types we just defined
-two-times-two-is-? : RawBijection (Pair Two Two) {!   !}
+two-times-two-is-? : RawBijection (Pair Two Two) Four
 -- And now demonstrate this to be true in the definition
-two-times-two-is-? = {!   !}
+two-times-two-is-? = makeRawBijection (λ { (mkPair 1/Two 1/Two) → 1/Four
+                                         ; (mkPair 1/Two 2/Two) → 2/Four
+                                         ; (mkPair 2/Two 1/Two) → 3/Four
+                                         ; (mkPair 2/Two 2/Two) → 4/Four })
+                                       λ { 1/Four → mkPair 1/Two 1/Two
+                                         ; 2/Four → mkPair 1/Two 2/Two
+                                         ; 3/Four → mkPair 2/Two 1/Two
+                                         ; 4/Four → mkPair 2/Two 2/Two }
 -- Also, don't forget to prove to yourself that this is indeed a lawful bijection
 
-three-times-?-is-six : RawBijection (Pair Three {!   !}) Six
-three-times-?-is-six = {!   !}
+three-times-?-is-six : RawBijection (Pair Three Two) Six
+three-times-?-is-six = makeRawBijection (λ { (mkPair 1/Three 1/Two) → 1/Six
+                                           ; (mkPair 1/Three 2/Two) → 2/Six
+                                           ; (mkPair 2/Three 1/Two) → 3/Six
+                                           ; (mkPair 2/Three 2/Two) → 4/Six
+                                           ; (mkPair 3/Three 1/Two) → 5/Six
+                                           ; (mkPair 3/Three 2/Two) → 6/Six })
+                                         λ { 1/Six → mkPair 1/Three 1/Two
+                                           ; 2/Six → mkPair 1/Three 2/Two
+                                           ; 3/Six → mkPair 2/Three 1/Two
+                                           ; 4/Six → mkPair 2/Three 2/Two
+                                           ; 5/Six → mkPair 3/Three 1/Two
+                                           ; 6/Six → mkPair 3/Three 2/Two }
 
 -- There are two valid (though more or less equivalent) solutions here
-?-times-?-is-five : RawBijection (Pair {!   !} {!   !}) Five
-?-times-?-is-five = {!   !}
+?-times-?-is-five : RawBijection (Pair One Five) Five
+?-times-?-is-five = makeRawBijection (λ x → snd x)
+                                      λ x → mkPair 1/One x
 
 -- We can even show some laws of multiplication
-multiplicative-identity : {A : Set} → RawBijection (Pair A {!   !}) A
-multiplicative-identity = {!   !}
+multiplicative-identity : {A : Set} → RawBijection (Pair A One) A
+multiplicative-identity = makeRawBijection (λ x → fst x) 
+                                            λ x → mkPair x 1/One
 
 {-
 
@@ -730,61 +781,118 @@ It also justifies our logical interpretation of Pair A B, as the cartesian produ
 
 
 BoolAndNat-Bijection : RawBijection BoolAndNat (Pair Bool ℕ)
-BoolAndNat-Bijection = {!   !}
+BoolAndNat-Bijection = makeRawBijection (λ x → mkPair (getBool x) (getNat x))
+                                        (λ x → makeBoolAndNat (fst x) (snd x))
 
 big-Bijection : RawBijection BoolAndNat ℕ
-big-Bijection = {!   !}
+big-Bijection = makeRawBijection to' from'
+  where
+    to' : BoolAndNat → ℕ
+    to' (makeBoolAndNat false n) = 2 * n
+    to' (makeBoolAndNat true n) = 2 * n + 1
+    open import Solutions.Ch2 using (isOdd ; halve)
+    from' : ℕ → BoolAndNat
+    from' n = makeBoolAndNat (isOdd n) (halve n)
 
 TwoBijection-Bijection : RawBijection Two (RawBijection Two Two)
-TwoBijection-Bijection = {!   !}
+TwoBijection-Bijection = makeRawBijection to' from'
+  where
+    invertTwo : Two → Two
+    invertTwo 1/Two = 2/Two
+    invertTwo 2/Two = 1/Two
+
+    to' : Two → RawBijection Two Two
+    to' 1/Two = makeRawBijection id id
+    to' 2/Two = makeRawBijection invertTwo invertTwo
+    
+    from' : RawBijection Two Two → Two
+    from' f = to f 1/Two
+    
 
 Bijection-Bijection : {A B : Set} → RawBijection (RawBijection A B) (RawBijection B A)
-Bijection-Bijection = {!   !}
+Bijection-Bijection = makeRawBijection flip-Bijection flip-Bijection
 
 
 -- As "Pair A B" is anologous to multiplication (i.e. A × B), "A → B" is anologous to Exponentiation (i.e. Bᴬ)
 
 first-power-Bijection : {A : Set} → RawBijection A (One → A)
-first-power-Bijection = {!   !}
+first-power-Bijection {A} = makeRawBijection to' from'
+  where
+    to' : A → One → A
+    to' x 1/One = x
+    from' : (One → A) → A
+    from' f = f 1/One
 
 second-power-Bijection : RawBijection TwoNats (Two → ℕ)
-second-power-Bijection = {!   !}
+second-power-Bijection = makeRawBijection to' from'
+  where
+    to' : TwoNats → Two → ℕ
+    to' x 1/Two = TwoNats.fst x
+    to' x 2/Two = TwoNats.snd x
+    from' : (Two → ℕ) → TwoNats
+    from' f = makeTwoNats (f 1/Two) (f 2/Two)
 
 third-power-Bijection : RawBijection ThreeBools (Three → Bool)
-third-power-Bijection = {!   !}
+third-power-Bijection = makeRawBijection to' from'
+  where
+    to' : ThreeBools → Three → Bool
+    to' x 1/Three = ThreeBools.fst x
+    to' x 2/Three = ThreeBools.snd x
+    to' x 3/Three = ThreeBools.thd x
+    from' : (Three → Bool) → ThreeBools
+    from' f = record { fst = f 1/Three ; snd = f 2/Three ; thd = f 3/Three }
 
 fourth-power-Bijection : {A : Set} → RawBijection (Pair A (Pair A (Pair A A))) (Four → A)
-fourth-power-Bijection = {!   !}
+fourth-power-Bijection {A} = makeRawBijection to' from'
+  where
+    to' : Pair A (Pair A (Pair A A)) → Four → A
+    to' x 1/Four = fst x
+    to' x 2/Four = fst (snd x)
+    to' x 3/Four = fst (snd (snd x))
+    to' x 4/Four = snd (snd (snd x))
+    from' : (Four → A) → Pair A (Pair A (Pair A A))
+    from' f = mkPair (f 1/Four) (mkPair (f 2/Four) (mkPair (f 3/Four) (f 4/Four)))
 
 TupleOf : ℕ → Set → Set
-TupleOf n A = {!   !}
+TupleOf zero A = One
+TupleOf (suc n) A = Pair A (TupleOf n A)
 
 sixth-power-Bijection : {A : Set} → RawBijection (TupleOf 6 A) (Six → A)
-sixth-power-Bijection = {!   !}
+sixth-power-Bijection {A} = makeRawBijection to' from'
+  where
+    to' : TupleOf 6 A → Six → A
+    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 1/Six = a
+    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 2/Six = b
+    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 3/Six = c
+    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 4/Six = d
+    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 5/Six = e
+    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 6/Six = f
+    from' : (Six → A) → TupleOf 6 A
+    from' f = mkPair (f 1/Six) (mkPair (f 2/Six) (mkPair (f 3/Six) (mkPair (f 4/Six) (mkPair (f 5/Six) (mkPair (f 6/Six) 1/One)))))
 
 
 -- We can also church encode product types
 
 church-encode-BoolAndNat : BoolAndNat → {R : Set} → (Bool → ℕ → R) → R
-church-encode-BoolAndNat x = {!   !}
+church-encode-BoolAndNat (makeBoolAndNat b n) = λ f → f b n
 
 church-decode-BoolAndNat : ({R : Set} → (Bool → ℕ → R) → R) → BoolAndNat
-church-decode-BoolAndNat x = {!   !}
+church-decode-BoolAndNat x = makeBoolAndNat (x (λ b n → b)) (x (λ b n → n))
 
 church-encode-Pair : {A B : Set} → Pair A B → {R : Set} → (A → B → R) → R
-church-encode-Pair x = {!   !}
+church-encode-Pair (mkPair x y) = λ f → f x y
 
 church-decode-Pair : {A B : Set} → ({R : Set} → (A → B → R) → R) → Pair A B
-church-decode-Pair x = {!   !}
+church-decode-Pair x = mkPair (x (λ a b → a)) (x (λ a b → b))
 
 church-fst : {A B : Set} → ({R : Set} → (A → B → R) → R) → A
-church-fst x = {!   !}
+church-fst x = x (λ a _ → a)
 
 church-snd : {A B : Set} → ({R : Set} → (A → B → R) → R) → B
-church-snd x = {!   !}
+church-snd x = x (λ _ b → b)
 
 church-swap : {A B : Set} → ({R : Set} → (A → B → R) → R) → {R : Set} → (B → A → R) → R
-church-swap x = {!   !}
+church-swap x = λ f → f (x (λ a b → b)) (x (λ a b → a))
 
 
 -- Bi-implicational, aka "if and only if", written with "\<=>" or "\iff"
@@ -799,26 +907,27 @@ _iff_ = _⇔_
 -- We can turn a Bijection into a bi-implication, but not the other way around.
 -- RawBijection makes an informal promise about the functions it contains, whereas _⇔_ does not.
 Bijection-to-iff : {A B : Set} → RawBijection A B → A ⇔ B
-Bijection-to-iff f = {!   !}
+Bijection-to-iff f = mkPair (to f) (from f)
 
 -- For instance, the none of the following could be a valid Bijection:
 
 One⇔Two : One ⇔ Two
-One⇔Two = {!   !}
+One⇔Two = mkPair (λ _ → 1/Two) (λ _ → 1/One)
 
 idempotent-Pair : {A : Set} → A ⇔ Pair A A
-idempotent-Pair = {!   !}
+idempotent-Pair = mkPair (λ x → mkPair x x) (λ x → fst x)
 
 Pair-to-iff : {A B : Set} → Pair A B → (A ⇔ B)
-Pair-to-iff x = {!   !}
+Pair-to-iff x = mkPair (λ _ → snd x) (λ _ → fst x)
 
 [A∧[A→B]]⇔[B∧[B→A]] : {A B : Set} → Pair A (A → B) ⇔ Pair B (B → A)
-[A∧[A→B]]⇔[B∧[B→A]] = {!   !}
+[A∧[A→B]]⇔[B∧[B→A]] = mkPair (λ { (mkPair a a-to-b) → mkPair (a-to-b a) (λ _ → a)})
+                              λ { (mkPair b b-to-a) → mkPair (b-to-a b) (λ _ → b)}
 
 
 -- Given an impossible Bijection, construct a Bool which could neither be true nor false according to the laws of Bijections
 unlawful-Bijection-to-unlawful-Bool : RawBijection ℕ Bool → Bool
-unlawful-Bijection-to-unlawful-Bool x = {!   !}
+unlawful-Bijection-to-unlawful-Bool (makeRawBijection to from) = to (suc (from false + from true))
 
 
 {-
@@ -839,11 +948,57 @@ Define RawInjection and RawSurjection:
 
 -- challenge exercises:
 
+-- if k > 0 implies x = y, then c × x = c × y
+lemma₁ : {X Y K : Set} → (K → RawBijection X Y) → RawBijection (Pair K X) (Pair K Y)
+lemma₁ k→[x↔y] = makeRawBijection (λ { (mkPair k x) → mkPair k (to   (k→[x↔y] k) x) })
+                                  (λ { (mkPair k y) → mkPair k (from (k→[x↔y] k) y) })
+
+lemma₂ : ∀ {A B C : Set} → RawBijection A B → RawBijection (RawBijection B C) (RawBijection A C)
+lemma₂ a↔b = makeRawBijection (λ b↔c → compose-Bijection a↔b b↔c)
+                              (λ a↔c → compose-Bijection (flip-Bijection a↔b) a↔c)
+
 -- Try to make it as clear as possible that your definition respects the laws of Bijections
 -- One way to do this is to define smaller helper functions which can be reasoned about more clearly
 Bijection-transitivity-Bijection : {A B C : Set} → RawBijection (Pair (RawBijection A B) (RawBijection B C))
                                                                 (Pair (RawBijection A B) (RawBijection A C))
-Bijection-transitivity-Bijection = {!   !}
+Bijection-transitivity-Bijection {A} {B} {C} = lemma₁ lemma₂
 
-ThreeBijection-Bijection : RawBijection {!   !} (RawBijection Three Three)
-ThreeBijection-Bijection = {!   !}
+
+ThreeBijection-Bijection : RawBijection Six (RawBijection Three Three)
+ThreeBijection-Bijection = makeRawBijection to' from'
+  where
+
+    next prev swap-2-3 swap-1-2 swap-1-3 : Three → Three
+
+    next 1/Three = 2/Three
+    next 2/Three = 3/Three
+    next 3/Three = 1/Three
+
+    prev x = next (next x)
+
+    swap-2-3 1/Three = 1/Three
+    swap-2-3 2/Three = 3/Three
+    swap-2-3 3/Three = 2/Three
+
+    swap-1-2 x = next (swap-2-3 x)
+
+    swap-1-3 x = next (swap-1-2 x)
+
+    to' : Six → RawBijection Three Three
+    to' 1/Six = makeRawBijection id id
+    to' 2/Six = makeRawBijection next prev
+    to' 3/Six = makeRawBijection prev next
+    to' 4/Six = makeRawBijection swap-2-3 swap-2-3
+    to' 5/Six = makeRawBijection swap-1-3 swap-1-3
+    to' 6/Six = makeRawBijection swap-1-2 swap-1-2
+
+    from'-helper : Three → Three → Six
+    from'-helper 1/Three 2/Three = 1/Six
+    from'-helper 2/Three 3/Three = 2/Six
+    from'-helper 3/Three 1/Three = 3/Six
+    from'-helper 1/Three _       = 4/Six
+    from'-helper 2/Three _       = 5/Six
+    from'-helper 3/Three _       = 6/Six 
+     
+    from' : RawBijection Three Three → Six  
+    from' f = from'-helper (to f 1/Three) (to f 2/Three)  
