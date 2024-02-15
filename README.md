@@ -12,6 +12,8 @@ To get started, [install Agda](How-To-Install-Agda.md) (I promise it's worth it)
 
 Explanations may contain lines up to 150 characters long, so some readers may wish to turn on word-wrap in their editor.
 
+This tutorial should work for Agda versions 2.6.3 and later.
+
 ## Other Resources
 
 This tutorial aims to be more or less exactly what I wish existed when I started learning Agda. Topics are stretched out more and are explored much more clearly and exhaustively than they are any other Agda tutorial which I am aware of. Nonetheless, learning from a single resource is rarely ideal. The amount of new knowledge you need to absorb tends to ramp up very quickly when following any Agda tutorial and, consequently, you may hit a dead end, at which point things become too difficult and confusing to progress further. I therefore highly recommending learning from multiple sources at once, as they will all re-explain various important concepts in different ways and touch on slightly different topics. This will also allow you to get as far as you can with each resource, and then move on to the next. By the time you circle back around to a resource again, you will understand more and be able to make it further. For this purpose I recommend the following resources. Start at the top and work your way down as you see fit. If one resource isn't working then try another one, and maybe come back to the first one later.

@@ -3,7 +3,7 @@
 module Imports.Ch2 where
 
 -- import Function
-open import Solutions.Ch0 using (id; const; compose; apply; flip; on; lift) public
+open import Solutions.Ch0 using (id; const; compose; flip; on; lift) public
 
 -- import Data.Bool
 open import Solutions.Ch1 using (Bool; false; true; not; _∧_; _∨_; _xor_; _&&_; _||_; if_then_else_; _<=>_) public

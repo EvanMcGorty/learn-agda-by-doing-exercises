@@ -6,7 +6,7 @@ module Exercises.Ch3 where
 
 In this chapter we will explore so called "products" in Agda, and find out why such a familiar programming concept is given such a strange name.
 
-We will also look at the laws bijectivive functions, and define some bijections as well as some type-generic operations on bijections.
+We will also look at the laws bijective functions, and define some bijections as well as some type-generic operations on bijections.
 
 Once again, take a look at the imports for this chapter:
 
@@ -205,8 +205,8 @@ Notes:
 composeBoolsAndNats : {A : Set} → (BoolAndNat → A) → (A → Bool) → (A → ℕ) → BoolAndNat → BoolAndNat
 composeBoolsAndNats f g h x = {!   !}
 
-doubleComposeBoolAndNat : {A B : Set} → (A → BoolAndNat) → (BoolAndNat → BoolAndNat → B) → A → A → B
-doubleComposeBoolAndNat f g x y = {!   !}
+doubleComposeBoolAndNat : {A B : Set} → (A → BoolAndNat) → (BoolAndNat → BoolAndNat → B) → A → B
+doubleComposeBoolAndNat f g x = {!   !}
 
 compare-Bool-to-BoolAndNat : (Bool → BoolAndNat) → (Bool → BoolAndNat) → Bool
 compare-Bool-to-BoolAndNat f g = {!   !}
@@ -229,7 +229,7 @@ record ThreeBools : Set where
 
 {-
 
-This definition is arguably more readable than the equivalent definition as a datatype:
+This definition is arguably more readable than the equivalent definition as a data type:
 
 data ThreeBools : Set where
   makeThreeBools : Bool → Bool → Bool → ThreeBools
@@ -283,7 +283,7 @@ record TwoNats : Set where
 
 {-
 
-And allthough you can still write out record syntax, C-c C-c and C-c C-r will now default to using this constructor.
+And although you can still write out record syntax, C-c C-c and C-c C-r will now default to using this constructor.
 
 -}
 
@@ -296,11 +296,11 @@ is-one-one x = {!   !}
 
 {-
 
-In most languages, fields of a datatype are not global functions, and are usually accessed through dot-syntax (i.e. "foo.bar")
+In most languages, fields of a data type are not global functions, and are usually accessed through dot-syntax (i.e. "foo.bar")
 
-This means that these names do not pollute the global namespace, and different datatypes can reuse the same names for their fields.
+This means that these names do not pollute the global namespace, and different data types can reuse the same names for their fields.
 
-In Agda however, we don't have dot-syntax for members of datatypes, and accessors are just regular functions.
+In Agda however, we don't have dot-syntax for members of data types, and accessors are just regular functions.
 
 So to prevent ambiguity, records come with a module of the same name, which contains their accessors.
 
@@ -318,7 +318,7 @@ This avoids polluting the global namespace, and helps prevent ambiguities.
 
 Agda's module system is very powerful, in fact quite a bit more powerful than you need for a tutorial like this.
 
-Nonethelesss, I encourage you to try reading the official documentation on records and modules if you ever feel the need to.
+Nonetheless, I encourage you to try reading the official documentation on records and modules if you ever feel the need to.
 
 Despite now having automatically generated accessors though, pattern matching is still completely viable and often leads to more readable code.
 
@@ -344,7 +344,7 @@ This lets us write generic operations which work over products of any data type:
 -}
 
 record Pair (A : Set) (B : Set) : Set where
-  constructor mkPair
+  constructor makePair
   field
     fst : A
     snd : B
@@ -376,7 +376,7 @@ The first line of the declaration of Pair can be read as:
 
 Notably, however, is the use of parentheses for the type parameters here, instead of curly braces like we normally use with polymorphic functions.
 
-Most languages handle type parameters to generic datatypes separately from how they handle normal parameters to normal functions, unlike here.
+Most languages handle type parameters to generic data types separately from how they handle normal parameters to normal functions, unlike here.
 
 Here, Pair has normal parameters like a "Set → Set → Set", so we write parameters like "Pair ℕ Bool" rather than "Pair {ℕ} {Bool}"
 
@@ -389,11 +389,11 @@ My-Set→Set→Set = Pair
 
 {-
 
-Pair is called a type constructor (anologously to data constructors), because unlike most functions, when you apply its arguments, it doesn't reduce.
+Pair is called a type constructor (analogously to data constructors), because unlike most functions, when you apply its arguments, it doesn't reduce.
 
 Instead, its saturated form (i.e. with arguments applied) represents a complete, fully reduced type.
 
-The way that Agda so casually treats types just like values can be a bit mind bending at first, so take your time to wrap your head arounnd this.
+The way that Agda so casually treats types just like values can be a bit mind bending at first, so take your time to wrap your head around this.
 
 Most languages have some kind of syntactical barrier between types and values, making it easier to keep track of what is a type and what is a value.
 
@@ -548,7 +548,7 @@ This is also often referred to by programmers as an Isomorphism, which is actual
 Being able to construct a bijection is effectively proof that two sets have the same number of elements.
   (In fact, some will even refer to this as an equivalence between types, and that a Bijection demonstrates that two types are the same)
 
-However, this datatype only expects a "to" and "from" function, and does not enforce that they form a bijection together.
+However, this data type only expects a "to" and "from" function, and does not enforce that they form a bijection together.
 
 We might normally express this requirement more formally by saying something like:
   "∀ a ∈ A, a ≡ from (to a)" (every element in set A has a one-to-one mapping in set B)
@@ -557,11 +557,11 @@ We might normally express this requirement more formally by saying something lik
 
 We haven't learned how to enforce such a requirement in the Agda type system yet, so for now we will just do what most programmers do:
 
-Its a pretty common practice in programming to have informal preconditions, postconditions, and invariants about variables.
+Its a pretty common practice in programming to have informal preconditions, post-conditions, and invariants about variables.
 
-For example, we might require and assume that the numerator and denomenator of some particular "Fraction" datatype always be in reduced form.
+For example, we might require and assume that the numerator and denominator of some particular "Fraction" data type always be in reduced form.
 
-In the same way, we are going to require informally that any RawBijection follows the above mentioned laws.
+In the same way, we are going to require informally that any RawBijection follow the above mentioned laws.
 
 In Agda, since we are perfectly capable of enforcing an invariant like this in the type system, we like to prefix types like this with "Raw".
 
@@ -653,7 +653,7 @@ data Six : Set where
 
 {-
 
-These datatypes are similar to Bool, but they each have a number of distinct elements exactly equal to their name.
+These data types are similar to Bool, but they each have a number of distinct elements exactly equal to their name.
 
 We use some new syntactic sugar here which lets us write constructors with the same type on the same line.
 
@@ -742,7 +742,7 @@ Bijection-Bijection : {A B : Set} → RawBijection (RawBijection A B) (RawBiject
 Bijection-Bijection = {!   !}
 
 
--- As "Pair A B" is anologous to multiplication (i.e. A × B), "A → B" is anologous to Exponentiation (i.e. Bᴬ)
+-- As "Pair A B" is analogous to multiplication (i.e. A × B), "A → B" is analogous to Exponentiation (i.e. Bᴬ)
 
 first-power-Bijection : {A : Set} → RawBijection A (One → A)
 first-power-Bijection = {!   !}

@@ -92,7 +92,7 @@ This is a very mathematical way of defining the natural numbers, and it is very 
 
 Although it may not be very efficient, it has a very simple structure, and doesn't rely on complex/low-level code, making it easy to reason about.
 
-By defining this type recursively we also manage to acheive a type/Set with infinitely many elements, so we aren't limited to 32 or 64 bits.
+By defining this type recursively we also manage to achieve a type/Set with infinitely many elements, so we aren't limited to 32 or 64 bits.
 
 There are a few properties of this definition that makes it a *real* definition of the natural numbers, which are worth noting.
 
@@ -137,11 +137,9 @@ We can in fact accomplish this however, by pattern matching, just like we have d
 
 Natural numbers, are a bit more interesting to pattern match with, because the suc case contains another natural number (its predecessor).
 
-In a traditional language, simple pattern matching on ℕ like would be like declaring a virtual method in the base class "Nat".
+In an object-oriented programming language, simple pattern matching on ℕ like would be like declaring a virtual method in a base class "Nat".
 
-Then by defining the method in each derived class, you handle the "Zero" case and the "Suc" case where you have another "Nat"
-
-and handeling both cases by overring that method.
+Then by overriding the method in each derived class, you handle the "Zero" case and the "Suc" case where you have another "Nat".
 
 Give this a try, once again with C-c C-c:
 
@@ -172,7 +170,9 @@ You can use this variable just like any other argument, and you can even case sp
 
 For readability, it can be worth renaming this variable from whatever name Agda automatically gives it, perhaps to something like n' or pred-n.
 
-Don't forget though, to reload after modifying anything by hand, so that interactive commands are aware of any changes you have made.
+Additionally, you can rename variables to '_' to entirely ignore them and not even bring them into scope, making it clear that they are not use\\d.
+
+Don't forget though, to reload after modifying anything by hand, so that interactive commands are made aware of any changes you have made.
 
 Try using this knowledge to define the following functions:
 
@@ -268,7 +268,7 @@ The point however, is that this function clearly terminates, recursively decreme
 
 On the other hand, however, the termination checker doesn't see this definition any differently than the first example.
 
-In fact, as humans we are taking quite a bit of reasoning for granted, just because it is intutive to us. Namely:
+In fact, as humans we are taking quite a bit of reasoning for granted, just because it is intuitive to us. Namely:
   1. If you apply pred to a natural number enough times, it will eventually reach zero
   2. When it reaches zero, "isZero x" will return true
   3. if_then_else_ will not use "okay (pred x)" if "isZero x" is true
@@ -291,11 +291,11 @@ good (suc n) = good n
 
 Here, we use pattern matching to not only (arguably) make the definition more readable, but also make it clear that it terminates.
 
-By the nature of data type definitions in Agda, a pattern like (suc x) will always be "structrually larger" than x.
+By the nature of data type definitions in Agda, a pattern like (suc x) will always be "structurally larger" than x.
 
 Every constructor in Agda produces a value that, naturally, is structurally larger than all of its inputs.
 
-So, when pattern matching, effectively any subexpression of a pattern is structurally smaller than the entire pattern.
+So, when pattern matching, effectively any sub-expression of a pattern is structurally smaller than the entire pattern.
 
 The termination checker just checks that at every recursive call, at least one argument is always getting structurally smaller.
 
@@ -410,16 +410,16 @@ Lets define some more functions.
 
 
 infix  4 _<ᵇ_ _≤ᵇ_
-infixl 6 _∸_ _-_ _⊔_ _max_
+infixl 6 _∸_ _-'_ _⊔_ _max_
 infixl 7 _*_ _⊓_ _min_
 
 -- Subtraction rounded up to zero, written as \.-
-_∸_ _-_ : ℕ → ℕ → ℕ
+_∸_ _-'_ : ℕ → ℕ → ℕ
 n ∸ zero = n
 zero ∸ suc m = zero
 suc n ∸ suc m = n ∸ m
 
-_-_ = _∸_
+_-'_ = _∸_
 
 _*_ : ℕ → ℕ → ℕ
 zero * m = zero
@@ -467,7 +467,7 @@ A lot of these operations seem to come down to more or less just doing something
 
 In fact, the ability to do something n times is actually all we technically need to perform any arbitrary computation with ℕ.
 
-In practice this can be sometimes very hard without access to other useful datatypes, but for simple recursive functions it's often pretty doable:
+In practice this can be sometimes very hard without access to other useful data types, but for simple recursive functions it's often pretty doable:
 
 -}
 
@@ -752,7 +752,7 @@ flatten-streams stream-stream = λ i → stream-stream (unpair-x i) (unpair-y i)
 church-apply-until-true : ({A : Set} → (A → A) → A → A) → {A : Set} → (A → A) → A → (A → {B : Set} → B → B → B) → A
 church-apply-until-true n = λ f x p → n (λ x' → p x' x' (f x')) x
 
--- Wierdly, this is much harder to define with church encoded naturals.
+-- Weirdly, this is much harder to define with church encoded naturals.
 church-pred : ({A : Set} → (A → A) → A → A) → {A : Set} → (A → A) → A → A
 church-pred n {A} = λ f x → n {A → (A → A) → A} (λ m n j → m x f) (λ n j → n) x λ r → r
 

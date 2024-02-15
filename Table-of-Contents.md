@@ -25,9 +25,9 @@ Exercises primarily build comfort with Agda syntax and interactive editing, whil
 - The definition of Bool
 - Pattern matching with Bool
 - "Mixfix" operators, precedence
-- Evaluating/normalizing expressions
-- Type aliases, functions into Set, and compile-time computation
-- Variants of interactive Agda commands (i.e. "C-c", "C-y", and "C-u")
+- Evaluating/normalizing expressions to test code
+- Type aliases, compile-time computation, and C-c/C-y/C-u
+- Type erasure and constructivism
 - Church-encoded Bool
 
 ### Ch2 - Natural Numbers
@@ -71,9 +71,15 @@ This section is just for me, so I can develop an overall plan and save ideas for
 With a firm grasp over most of Agda's basic features, we dive into functional programming in Agda.
 This part should leave the reader with a firm understanding of all the most central themes that might be found in a typical haskell tutorial.
 
-### Maybe & List
+### Sum Types
 
+- sums via data declarations
+- maybe
+- generalized sum type
 - Lazy evaluation in Agda
+
+### Lists
+
 - Correct-by-construction code (e.g. with NonemptyList)
 
 ### Typeclasses
@@ -83,8 +89,6 @@ This part should leave the reader with a firm understanding of all the most cent
 - Ord
 - Enum
 - Ix
-
-### Sums
 
 ### Unit and Void
 

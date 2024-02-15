@@ -6,7 +6,7 @@ module Solutions.Ch3 where
 
 In this chapter we will explore so called "products" in Agda, and find out why such a familiar programming concept is given such a strange name.
 
-We will also look at the laws bijectivive functions, and define some bijections as well as some type-generic operations on bijections.
+We will also look at the laws bijective functions, and define some bijections as well as some type-generic operations on bijections.
 
 Once again, take a look at the imports for this chapter:
 
@@ -238,12 +238,12 @@ record ThreeBools : Set where
 
 {-
 
-This definition is arguably more readable than the equivalent definition as a datatype:
+This definition is arguably more readable than the equivalent definition as a data type:
 
 data ThreeBools : Set where
   makeThreeBools : Bool → Bool → Bool → ThreeBools
 
-And reads more like its equivalent in a more mainstream language:
+And reads more like its equivalent in a more typical language:
 
 class ThreeBools {
   Bool fst;
@@ -293,7 +293,7 @@ record TwoNats : Set where
 
 {-
 
-And allthough you can still write out record syntax, C-c C-c and C-c C-r will now default to using this constructor.
+And although you can still write out record syntax, C-c C-c and C-c C-r will now default to using this constructor.
 
 -}
 
@@ -307,11 +307,11 @@ is-one-one (makeTwoNats fst snd) = false
 
 {-
 
-In most languages, fields of a datatype are not global functions, and are usually accessed through dot-syntax (i.e. "foo.bar")
+In most languages, fields of a data type are not global functions, and are usually accessed through dot-syntax (i.e. "foo.bar")
 
-This means that these names do not pollute the global namespace, and different datatypes can reuse the same names for their fields.
+This means that these names do not pollute the global namespace, and different data types can reuse the same names for their fields.
 
-In Agda however, we don't have dot-syntax for members of datatypes, and accessors are just regular functions.
+In Agda however, we don't have dot-syntax for members of data types, and accessors are just regular functions.
 
 So to prevent ambiguity, records come with a module of the same name, which contains their accessors.
 
@@ -329,7 +329,7 @@ This avoids polluting the global namespace, and helps prevent ambiguities.
 
 Agda's module system is very powerful, in fact quite a bit more powerful than you need for a tutorial like this.
 
-Nonethelesss, I encourage you to try reading the official documentation on records and modules if you ever feel the need to.
+Nonetheless, I encourage you to try reading the official documentation on records and modules if you ever feel the need to.
 
 Despite now having automatically generated accessors though, pattern matching is still completely viable and often leads to more readable code.
 
@@ -355,7 +355,7 @@ This lets us write generic operations which work over products of any data type:
 -}
 
 record Pair (A : Set) (B : Set) : Set where
-  constructor mkPair
+  constructor makePair
   field
     fst : A
     snd : B
@@ -364,13 +364,13 @@ record Pair (A : Set) (B : Set) : Set where
 open Pair
 
 seven-and-false : Pair ℕ Bool
-seven-and-false = mkPair 7 false
+seven-and-false = makePair 7 false
 
 swap : {A B : Set} → Pair A B → Pair B A
-swap (mkPair x y) = mkPair y x
+swap (makePair x y) = makePair y x
 
 reorderPairs : {A B C : Set} → Pair A (Pair B C) → Pair (Pair A B) C
-reorderPairs (mkPair x (mkPair y z)) = mkPair (mkPair x y) z
+reorderPairs (makePair x (makePair y z)) = makePair (makePair x y) z
 
 {-
 
@@ -387,7 +387,7 @@ The first line of the declaration of Pair can be read as:
 
 Notably, however, is the use of parentheses for the type parameters here, instead of curly braces like we normally use with polymorphic functions.
 
-Most languages handle type parameters to generic datatypes separately from how they handle normal parameters to normal functions, unlike here.
+Most languages handle type parameters to generic data types separately from how they handle normal parameters to normal functions, unlike here.
 
 Here, Pair has normal parameters like a "Set → Set → Set", so we write parameters like "Pair ℕ Bool" rather than "Pair {ℕ} {Bool}"
 
@@ -400,11 +400,11 @@ My-Set→Set→Set = Pair
 
 {-
 
-Pair is called a type constructor (anologously to data constructors), because unlike most functions, when you apply its arguments, it doesn't reduce.
+Pair is called a type constructor (analogously to data constructors), because unlike most functions, when you apply its arguments, it doesn't reduce.
 
 Instead, its saturated form (i.e. with arguments applied) represents a complete, fully reduced type.
 
-The way that Agda so casually treats types just like values can be a bit mind bending at first, so take your time to wrap your head arounnd this.
+The way that Agda so casually treats types just like values can be a bit mind bending at first, so take your time to wrap your head around this.
 
 Most languages have some kind of syntactical barrier between types and values, making it easier to keep track of what is a type and what is a value.
 
@@ -448,8 +448,6 @@ runOnTwoOfNat = λ f x → f (fst x) (snd x)
 
 All of these functions are just as usable as you would hope them to be, because simply reduce during typechecking.
 
-Remember to use the C-y variant of commands (like C-y C-, and C-y C-.) to display the reduced forms of these types.
-
 Another really cool thing about Pair, is that it has a meaningful logical interpretation.
 
 Bool and ℕ are trivial to construct, so interpreted logically, as propositions, they are completely uninteresting.
@@ -488,7 +486,7 @@ Specifically, the situation in which you have an instance of each of its type pa
 -}
 
 construct-pair : {A B : Set} → A → B → Pair A B
-construct-pair x y = mkPair x y
+construct-pair x y = makePair x y
 
 {-
 
@@ -512,15 +510,15 @@ And we can actually prove more or less any property that you would expect to be 
 
 -- A implies A and A
 boring-Pair : {A : Set} → A → Pair A A
-boring-Pair x = mkPair x x
+boring-Pair x = makePair x x
 
 -- If A implies C, then A and B implies C and B
 map-left : {A B C : Set} → (A → C) → Pair A B → Pair C B
-map-left f (mkPair x y) = mkPair (f x) y
+map-left f (makePair x y) = makePair (f x) y
 
 -- If B implies C, then A and B implies A and C
 map-right : {A B C : Set} → (B → C) → Pair A B → Pair A C
-map-right f (mkPair x y) = mkPair x (f y)
+map-right f (makePair x y) = makePair x (f y)
 
 {-
 
@@ -529,10 +527,10 @@ And we can also finally show that curried functions are the same as the typical 
 -}
 
 curry : {A B C : Set} → (Pair A B → C) → A → B → C
-curry f x y = f (mkPair x y)
+curry f x y = f (makePair x y)
 
 uncurry : {A B C : Set} → (A → B → C) → Pair A B → C
-uncurry f (mkPair x y) = f x y
+uncurry f (makePair x y) = f x y
 
 {-
 
@@ -561,7 +559,7 @@ This is also often referred to by programmers as an Isomorphism, which is actual
 Being able to construct a bijection is effectively proof that two sets have the same number of elements.
   (In fact, some will even refer to this as an equivalence between types, and that a Bijection demonstrates that two types are the same)
 
-However, this datatype only expects a "to" and "from" function, and does not enforce that they form a bijection together.
+However, this data type only expects a "to" and "from" function, and does not enforce that they form a bijection together.
 
 We might normally express this requirement more formally by saying something like:
   "∀ a ∈ A, a ≡ from (to a)" (every element in set A has a one-to-one mapping in set B)
@@ -570,11 +568,11 @@ We might normally express this requirement more formally by saying something lik
 
 We haven't learned how to enforce such a requirement in the Agda type system yet, so for now we will just do what most programmers do:
 
-Its a pretty common practice in programming to have informal preconditions, postconditions, and invariants about variables.
+Its a pretty common practice in programming to have informal preconditions, post-conditions, and invariants about variables.
 
-For example, we might require and assume that the numerator and denomenator of some particular "Fraction" datatype always be in reduced form.
+For example, we might require and assume that the numerator and denominator of some particular "Fraction" data type always be in reduced form.
 
-In the same way, we are going to require informally that any RawBijection follows the above mentioned laws.
+In the same way, we are going to require informally that any RawBijection follow the above mentioned laws.
 
 In Agda, since we are perfectly capable of enforcing an invariant like this in the type system, we like to prefix types like this with "Raw".
 
@@ -596,9 +594,9 @@ FlippedPear-Bijection : {A B : Set} → RawBijection (Pair A B) (Pair B A)
 FlippedPear-Bijection = makeRawBijection swap swap
 
 TwoOf-Bijection : {A : Set} → RawBijection (Pair A A) (Bool → A)
-TwoOf-Bijection {A} = makeRawBijection (λ { (mkPair x y) false → x
-                                          ; (mkPair x y) true → y })
-                                       (λ f → mkPair (f false) (f true))
+TwoOf-Bijection {A} = makeRawBijection (λ { (makePair x y) false → x
+                                          ; (makePair x y) true → y })
+                                       (λ f → makePair (f false) (f true))
 
 flip-Bijection : {A B : Set} → RawBijection A B → RawBijection B A
 flip-Bijection f = makeRawBijection (from f) (to f)
@@ -673,7 +671,7 @@ data Six : Set where
 
 {-
 
-These datatypes are similar to Bool, but they each have a number of distinct elements exactly equal to their name.
+These data types are similar to Bool, but they each have a number of distinct elements exactly equal to their name.
 
 We use some new syntactic sugar here which lets us write constructors with the same type on the same line.
 
@@ -699,7 +697,7 @@ Six-to-Nat 5/Six = 5
 Six-to-Nat 6/Six = 6
 
 2/Three-and-4/Five : Pair Three Five
-2/Three-and-4/Five = mkPair 2/Three 4/Five
+2/Three-and-4/Five = makePair 2/Three 4/Five
 
 next-element-of-Four : Four → Four
 next-element-of-Four 1/Four = 2/Four
@@ -734,39 +732,39 @@ We will use Bijections to count how many elements are in a type:
 -- Fill in the hole in this type signature with one of the types we just defined
 two-times-two-is-? : RawBijection (Pair Two Two) Four
 -- And now demonstrate this to be true in the definition
-two-times-two-is-? = makeRawBijection (λ { (mkPair 1/Two 1/Two) → 1/Four
-                                         ; (mkPair 1/Two 2/Two) → 2/Four
-                                         ; (mkPair 2/Two 1/Two) → 3/Four
-                                         ; (mkPair 2/Two 2/Two) → 4/Four })
-                                       λ { 1/Four → mkPair 1/Two 1/Two
-                                         ; 2/Four → mkPair 1/Two 2/Two
-                                         ; 3/Four → mkPair 2/Two 1/Two
-                                         ; 4/Four → mkPair 2/Two 2/Two }
+two-times-two-is-? = makeRawBijection (λ { (makePair 1/Two 1/Two) → 1/Four
+                                         ; (makePair 1/Two 2/Two) → 2/Four
+                                         ; (makePair 2/Two 1/Two) → 3/Four
+                                         ; (makePair 2/Two 2/Two) → 4/Four })
+                                       λ { 1/Four → makePair 1/Two 1/Two
+                                         ; 2/Four → makePair 1/Two 2/Two
+                                         ; 3/Four → makePair 2/Two 1/Two
+                                         ; 4/Four → makePair 2/Two 2/Two }
 -- Also, don't forget to prove to yourself that this is indeed a lawful bijection
 
 three-times-?-is-six : RawBijection (Pair Three Two) Six
-three-times-?-is-six = makeRawBijection (λ { (mkPair 1/Three 1/Two) → 1/Six
-                                           ; (mkPair 1/Three 2/Two) → 2/Six
-                                           ; (mkPair 2/Three 1/Two) → 3/Six
-                                           ; (mkPair 2/Three 2/Two) → 4/Six
-                                           ; (mkPair 3/Three 1/Two) → 5/Six
-                                           ; (mkPair 3/Three 2/Two) → 6/Six })
-                                         λ { 1/Six → mkPair 1/Three 1/Two
-                                           ; 2/Six → mkPair 1/Three 2/Two
-                                           ; 3/Six → mkPair 2/Three 1/Two
-                                           ; 4/Six → mkPair 2/Three 2/Two
-                                           ; 5/Six → mkPair 3/Three 1/Two
-                                           ; 6/Six → mkPair 3/Three 2/Two }
+three-times-?-is-six = makeRawBijection (λ { (makePair 1/Three 1/Two) → 1/Six
+                                           ; (makePair 1/Three 2/Two) → 2/Six
+                                           ; (makePair 2/Three 1/Two) → 3/Six
+                                           ; (makePair 2/Three 2/Two) → 4/Six
+                                           ; (makePair 3/Three 1/Two) → 5/Six
+                                           ; (makePair 3/Three 2/Two) → 6/Six })
+                                         λ { 1/Six → makePair 1/Three 1/Two
+                                           ; 2/Six → makePair 1/Three 2/Two
+                                           ; 3/Six → makePair 2/Three 1/Two
+                                           ; 4/Six → makePair 2/Three 2/Two
+                                           ; 5/Six → makePair 3/Three 1/Two
+                                           ; 6/Six → makePair 3/Three 2/Two }
 
 -- There are two valid (though more or less equivalent) solutions here
 ?-times-?-is-five : RawBijection (Pair One Five) Five
 ?-times-?-is-five = makeRawBijection (λ x → snd x)
-                                      λ x → mkPair 1/One x
+                                      λ x → makePair 1/One x
 
 -- We can even show some laws of multiplication
 multiplicative-identity : {A : Set} → RawBijection (Pair A One) A
 multiplicative-identity = makeRawBijection (λ x → fst x) 
-                                            λ x → mkPair x 1/One
+                                            λ x → makePair x 1/One
 
 {-
 
@@ -781,7 +779,7 @@ It also justifies our logical interpretation of Pair A B, as the cartesian produ
 
 
 BoolAndNat-Bijection : RawBijection BoolAndNat (Pair Bool ℕ)
-BoolAndNat-Bijection = makeRawBijection (λ x → mkPair (getBool x) (getNat x))
+BoolAndNat-Bijection = makeRawBijection (λ x → makePair (getBool x) (getNat x))
                                         (λ x → makeBoolAndNat (fst x) (snd x))
 
 big-Bijection : RawBijection BoolAndNat ℕ
@@ -813,7 +811,7 @@ Bijection-Bijection : {A B : Set} → RawBijection (RawBijection A B) (RawBiject
 Bijection-Bijection = makeRawBijection flip-Bijection flip-Bijection
 
 
--- As "Pair A B" is anologous to multiplication (i.e. A × B), "A → B" is anologous to Exponentiation (i.e. Bᴬ)
+-- As "Pair A B" is analogous to multiplication (i.e. A × B), "A → B" is analogous to Exponentiation (i.e. Bᴬ)
 
 first-power-Bijection : {A : Set} → RawBijection A (One → A)
 first-power-Bijection {A} = makeRawBijection to' from'
@@ -851,7 +849,7 @@ fourth-power-Bijection {A} = makeRawBijection to' from'
     to' x 3/Four = fst (snd (snd x))
     to' x 4/Four = snd (snd (snd x))
     from' : (Four → A) → Pair A (Pair A (Pair A A))
-    from' f = mkPair (f 1/Four) (mkPair (f 2/Four) (mkPair (f 3/Four) (f 4/Four)))
+    from' f = makePair (f 1/Four) (makePair (f 2/Four) (makePair (f 3/Four) (f 4/Four)))
 
 TupleOf : ℕ → Set → Set
 TupleOf zero A = One
@@ -861,14 +859,14 @@ sixth-power-Bijection : {A : Set} → RawBijection (TupleOf 6 A) (Six → A)
 sixth-power-Bijection {A} = makeRawBijection to' from'
   where
     to' : TupleOf 6 A → Six → A
-    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 1/Six = a
-    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 2/Six = b
-    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 3/Six = c
-    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 4/Six = d
-    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 5/Six = e
-    to' (mkPair a (mkPair b (mkPair c (mkPair d (mkPair e (mkPair f g)))))) 6/Six = f
+    to' (makePair a (makePair b (makePair c (makePair d (makePair e (makePair f g)))))) 1/Six = a
+    to' (makePair a (makePair b (makePair c (makePair d (makePair e (makePair f g)))))) 2/Six = b
+    to' (makePair a (makePair b (makePair c (makePair d (makePair e (makePair f g)))))) 3/Six = c
+    to' (makePair a (makePair b (makePair c (makePair d (makePair e (makePair f g)))))) 4/Six = d
+    to' (makePair a (makePair b (makePair c (makePair d (makePair e (makePair f g)))))) 5/Six = e
+    to' (makePair a (makePair b (makePair c (makePair d (makePair e (makePair f g)))))) 6/Six = f
     from' : (Six → A) → TupleOf 6 A
-    from' f = mkPair (f 1/Six) (mkPair (f 2/Six) (mkPair (f 3/Six) (mkPair (f 4/Six) (mkPair (f 5/Six) (mkPair (f 6/Six) 1/One)))))
+    from' f = makePair (f 1/Six) (makePair (f 2/Six) (makePair (f 3/Six) (makePair (f 4/Six) (makePair (f 5/Six) (makePair (f 6/Six) 1/One)))))
 
 
 -- We can also church encode product types
@@ -880,10 +878,10 @@ church-decode-BoolAndNat : ({R : Set} → (Bool → ℕ → R) → R) → BoolAn
 church-decode-BoolAndNat x = makeBoolAndNat (x (λ b n → b)) (x (λ b n → n))
 
 church-encode-Pair : {A B : Set} → Pair A B → {R : Set} → (A → B → R) → R
-church-encode-Pair (mkPair x y) = λ f → f x y
+church-encode-Pair (makePair x y) = λ f → f x y
 
 church-decode-Pair : {A B : Set} → ({R : Set} → (A → B → R) → R) → Pair A B
-church-decode-Pair x = mkPair (x (λ a b → a)) (x (λ a b → b))
+church-decode-Pair x = makePair (x (λ a b → a)) (x (λ a b → b))
 
 church-fst : {A B : Set} → ({R : Set} → (A → B → R) → R) → A
 church-fst x = x (λ a _ → a)
@@ -907,22 +905,22 @@ _iff_ = _⇔_
 -- We can turn a Bijection into a bi-implication, but not the other way around.
 -- RawBijection makes an informal promise about the functions it contains, whereas _⇔_ does not.
 Bijection-to-iff : {A B : Set} → RawBijection A B → A ⇔ B
-Bijection-to-iff f = mkPair (to f) (from f)
+Bijection-to-iff f = makePair (to f) (from f)
 
 -- For instance, the none of the following could be a valid Bijection:
 
 One⇔Two : One ⇔ Two
-One⇔Two = mkPair (λ _ → 1/Two) (λ _ → 1/One)
+One⇔Two = makePair (λ _ → 1/Two) (λ _ → 1/One)
 
 idempotent-Pair : {A : Set} → A ⇔ Pair A A
-idempotent-Pair = mkPair (λ x → mkPair x x) (λ x → fst x)
+idempotent-Pair = makePair (λ x → makePair x x) (λ x → fst x)
 
 Pair-to-iff : {A B : Set} → Pair A B → (A ⇔ B)
-Pair-to-iff x = mkPair (λ _ → snd x) (λ _ → fst x)
+Pair-to-iff x = makePair (λ _ → snd x) (λ _ → fst x)
 
 [A∧[A→B]]⇔[B∧[B→A]] : {A B : Set} → Pair A (A → B) ⇔ Pair B (B → A)
-[A∧[A→B]]⇔[B∧[B→A]] = mkPair (λ { (mkPair a a-to-b) → mkPair (a-to-b a) (λ _ → a)})
-                              λ { (mkPair b b-to-a) → mkPair (b-to-a b) (λ _ → b)}
+[A∧[A→B]]⇔[B∧[B→A]] = makePair (λ { (makePair a a-to-b) → makePair (a-to-b a) (λ _ → a)})
+                              λ { (makePair b b-to-a) → makePair (b-to-a b) (λ _ → b)}
 
 
 -- Given an impossible Bijection, construct a Bool which could neither be true nor false according to the laws of Bijections
@@ -948,10 +946,10 @@ Define RawInjection and RawSurjection:
 
 -- challenge exercises:
 
--- if k > 0 implies x = y, then c × x = c × y
+-- if k ≠ 0 implies x = y, then k × x = k × y
 lemma₁ : {X Y K : Set} → (K → RawBijection X Y) → RawBijection (Pair K X) (Pair K Y)
-lemma₁ k→[x↔y] = makeRawBijection (λ { (mkPair k x) → mkPair k (to   (k→[x↔y] k) x) })
-                                  (λ { (mkPair k y) → mkPair k (from (k→[x↔y] k) y) })
+lemma₁ k→[x↔y] = makeRawBijection (λ { (makePair k x) → makePair k (to   (k→[x↔y] k) x) })
+                                  (λ { (makePair k y) → makePair k (from (k→[x↔y] k) y) })
 
 lemma₂ : ∀ {A B C : Set} → RawBijection A B → RawBijection (RawBijection B C) (RawBijection A C)
 lemma₂ a↔b = makeRawBijection (λ b↔c → compose-Bijection a↔b b↔c)
@@ -961,7 +959,7 @@ lemma₂ a↔b = makeRawBijection (λ b↔c → compose-Bijection a↔b b↔c)
 -- One way to do this is to define smaller helper functions which can be reasoned about more clearly
 Bijection-transitivity-Bijection : {A B C : Set} → RawBijection (Pair (RawBijection A B) (RawBijection B C))
                                                                 (Pair (RawBijection A B) (RawBijection A C))
-Bijection-transitivity-Bijection {A} {B} {C} = lemma₁ lemma₂
+Bijection-transitivity-Bijection = lemma₁ lemma₂
 
 
 ThreeBijection-Bijection : RawBijection Six (RawBijection Three Three)
